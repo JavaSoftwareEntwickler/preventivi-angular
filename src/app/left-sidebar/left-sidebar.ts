@@ -21,7 +21,7 @@ export class LeftSidebar {
     {
       routeLink: 'preventivo',
       icon: 'fal fa-box-open',
-      label: 'Preventivo',
+      label: 'Preventivi',
     },
     {
       routeLink: 'pages',
