@@ -1,0 +1,1 @@
+export const BREAKPOINT_SMALL = 768; // breakpoint per la larghezza

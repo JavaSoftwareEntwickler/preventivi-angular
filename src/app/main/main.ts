@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { BREAKPOINT_SMALL } from '../config/constants';
 
 @Component({
   selector: 'app-main',
@@ -17,6 +18,6 @@ export class Main {
     if (isLeftSidebarCollapsed) {
       return '';
     }
-    return this.screenWidth() > 768 ? 'body-trimmed' : 'body-md-screen';
+    return this.screenWidth() > BREAKPOINT_SMALL ? 'body-trimmed' : 'body-md-screen';
   });
 }

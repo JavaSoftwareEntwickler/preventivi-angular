@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit, signal } from '@angular/core';
 import { LeftSidebar } from './left-sidebar/left-sidebar';
 import { Main } from './main/main';
+import { BREAKPOINT_SMALL } from './config/constants';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ export class App implements OnInit {
   @HostListener('window:resize')
   onResize() {
     this.screenWidth.set(window.innerWidth);
-    if (this.screenWidth() < 768) {
+    if (this.screenWidth() < BREAKPOINT_SMALL) {
       this.isLeftSidebarCollapsed.set(true);
     } else {
       this.isLeftSidebarCollapsed.set(false);
@@ -24,7 +25,7 @@ export class App implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
+    this.isLeftSidebarCollapsed.set(this.screenWidth() < BREAKPOINT_SMALL);
   }
 
   changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
