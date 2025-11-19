@@ -5,11 +5,46 @@
     gap: 1.5rem;
 }
 
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .page-title {
     font-size: 1.8rem;
     font-weight: 600;
     color: #012a5b;
-    margin-bottom: 1rem;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.search {
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 220px;
+}
+
+.btn-primary {
+    padding: 0.7rem 1.2rem;
+    background: #012a5b;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-primary:hover {
+    opacity: 0.85;
 }
 
 .table-card {
@@ -22,34 +57,82 @@
 .styled-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 1rem;
 }
 
-.styled-table thead tr {
-    background-color: #012a5b;
-    color: #ffffff;
-    text-align: left;
+.styled-table th {
+    background: #012a5b;
+    color: white;
+    padding: 12px;
+    cursor: pointer;
 }
 
-.styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+    padding: 12px;
 }
 
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
-}
-
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #f4f7fa;
+    border-bottom: 1px solid #ddd;
 }
 
 .styled-table tbody tr:hover {
-    background-color: #e8eef6;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
+    background: #e8eef6;
 }
 
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #012a5b;
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+}
+
+.pagination button {
+    padding: 0.5rem 0.9rem;
+    border-radius: 0.4rem;
+    border: 1px solid #012a5b;
+    background: white;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* Modale */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+.modal-card {
+    position: fixed;
+    background: white;
+    padding: 2rem;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 0.7rem;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    z-index: 11;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-close {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 0.7rem;
+    border: none;
+    background: #012a5b;
+    color: white;
+    border-radius: 0.5rem;
+    cursor: pointer;
 }

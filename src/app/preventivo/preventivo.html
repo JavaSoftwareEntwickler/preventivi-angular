@@ -1,19 +1,35 @@
 <div class="page-container">
-    <h2 class="page-title">Elenco Preventivi</h2>
 
+    <!-- Header + Search + Button -->
+    <div class="header-row">
+        <h2 class="page-title">Elenco Preventivi</h2>
+
+        <div class="actions">
+            <input type="text" class="search" placeholder="Cerca cliente..."
+                (input)="searchTerm.set($any($event.target).value)" />
+
+            <button class="btn-primary" (click)="nuovoPreventivo()">
+                <i class="fal fa-plus"></i> Nuovo Preventivo
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabella -->
     <div class="table-card">
         <table class="styled-table">
+
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Cliente</th>
-                    <th>Data</th>
-                    <th>Importo Totale (€)</th>
+                    <th (click)="changeSort('id')">ID</th>
+                    <th (click)="changeSort('nomeCliente')">Cliente</th>
+                    <th (click)="changeSort('dataPreventivo')">Data</th>
+                    <th (click)="changeSort('importoTotale')">Importo (€)</th>
                 </tr>
             </thead>
+
             <tbody>
-                @for (p of preventivi; track p.id) {
-                <tr>
+                @for (p of paginated(); track p.id) {
+                <tr (click)="openDetails(p)">
                     <td>{{ p.id }}</td>
                     <td>{{ p.nomeCliente }}</td>
                     <td>{{ p.dataPreventivo }}</td>
@@ -21,6 +37,53 @@
                 </tr>
                 }
             </tbody>
+
         </table>
     </div>
+
+    <!-- Paginazione -->
+    <div class="pagination">
+        <button (click)="goToPage(currentPage()-1)" [disabled]="currentPage() === 1">
+            <i class="fal fa-chevron-left"></i>
+        </button>
+
+        <span>Pagina {{ currentPage() }} di {{ totalPages() }}</span>
+
+        <button (click)="goToPage(currentPage()+1)" [disabled]="currentPage() === totalPages()">
+            <i class="fal fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Modale Dettaglio -->
+    @if (showDetails()) {
+    <div class="modal-overlay" (click)="closeDetails()"></div>
+
+    <div class="modal-card">
+        <h3>Dettaglio Preventivo</h3>
+
+        <div class="detail-row">
+            <span>ID</span>
+            <strong>{{ selectedPreventivo()?.id }}</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Cliente</span>
+            <strong>{{ selectedPreventivo()?.nomeCliente }}</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Data</span>
+            <strong>{{ selectedPreventivo()?.dataPreventivo }}</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Importo</span>
+            <strong>{{ selectedPreventivo()?.importoTotale | number:'1.2-2' }} €</strong>
+        </div>
+
+        <button class="btn-close" (click)="closeDetails()">
+            Chiudi
+        </button>
+    </div>
+    }
 </div>
