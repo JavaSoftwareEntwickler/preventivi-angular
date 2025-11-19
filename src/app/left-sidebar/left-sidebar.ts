@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CollapseOnNavigateDirective } from './collapse-on-navigate.directive';
 
 @Component({
   selector: 'app-left-sidebar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, CollapseOnNavigateDirective],
   templateUrl: './left-sidebar.html',
   styleUrl: './left-sidebar.css',
 })
