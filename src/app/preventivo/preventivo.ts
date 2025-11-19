@@ -106,4 +106,18 @@ export class Preventivo {
     alert('Funzionalità da implementare: apertura form nuovo preventivo');
   }
 
+  editPreventivo(p: PreventivoModel) {
+  alert('Funzionalità EDIT da implementare per preventivo ID: ' + p.id);
+}
+
+deletePreventivo(p: PreventivoModel) {
+  const conferma = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
+
+  if (conferma) {
+    this.preventivi.set(this.preventivi().filter(x => x.id !== p.id));
+    this.closeDetails();
+  }
+}
+
+
 }

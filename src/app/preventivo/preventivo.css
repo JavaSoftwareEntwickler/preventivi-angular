@@ -136,3 +136,42 @@
     border-radius: 0.5rem;
     cursor: pointer;
 }
+
+/* Icone delete e edit sul dettaglio del preventivo*/
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.icon-btn {
+    background: #f5f5f5;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    font-size: 1.1rem;
+}
+
+.icon-btn:hover {
+    background: #e0e0e0;
+}
+
+.icon-btn.edit i {
+    color: #0c66d8;
+}
+
+.icon-btn.delete i {
+    color: #d62828;
+}
+
+.icon-btn.close i {
+    color: #333;
+}

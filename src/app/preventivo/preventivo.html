@@ -59,7 +59,23 @@
     <div class="modal-overlay" (click)="closeDetails()"></div>
 
     <div class="modal-card">
-        <h3>Dettaglio Preventivo</h3>
+        <div class="modal-header">
+            <h3>Dettaglio Preventivo</h3>
+
+            <div class="modal-actions">
+                <button class="icon-btn edit" (click)="editPreventivo(selectedPreventivo()!)">
+                    <i class="fal fa-pencil"></i>
+                </button>
+
+                <button class="icon-btn delete" (click)="deletePreventivo(selectedPreventivo()!)">
+                    <i class="fal fa-trash"></i>
+                </button>
+
+                <button class="icon-btn close" (click)="closeDetails()">
+                    <i class="fal fa-times"></i>
+                </button>
+            </div>
+        </div>
 
         <div class="detail-row">
             <span>ID</span>
@@ -80,10 +96,6 @@
             <span>Importo</span>
             <strong>{{ selectedPreventivo()?.importoTotale | number:'1.2-2' }} €</strong>
         </div>
-
-        <button class="btn-close" (click)="closeDetails()">
-            Chiudi
-        </button>
     </div>
     }
 </div>
