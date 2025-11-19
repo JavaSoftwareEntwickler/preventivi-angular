@@ -103,27 +103,6 @@
     cursor: default;
 }
 
-/* Modale dettaglio preventivo*/
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 10;
-}
-
-.modal-card {
-    position: fixed;
-    background: white;
-    padding: 2rem;
-    width: 500px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 0.7rem;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    z-index: 11;
-}
-
 .detail-row {
     display: flex;
     justify-content: space-between;
@@ -143,13 +122,6 @@
 }
 
 /* Icone delete e edit sul dettaglio del preventivo*/
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
 .modal-actions {
     display: flex;
     gap: 0.8rem;

@@ -1,5 +1,8 @@
 <div class="page-container">
 
+    <!-- **************  LISTA  ************** -->
+    <!-- ************************************* -->
+    @if (pageMode() === 'list') {
     <!-- Header + Search + Button -->
     <div class="header-row">
         <h2 class="page-title">Elenco Preventivi</h2>
@@ -53,33 +56,18 @@
             <i class="fal fa-chevron-right"></i>
         </button>
     </div>
+    }
 
-    <!-- Modale Dettaglio -->
-    @if (showDetails()) {
-    <div class="modal-overlay" (click)="closeDetails()"></div>
+    <!-- ****** DETTAGLIO / EDIT INLINE ****** -->
+    <!-- ************************************* -->
+    @if (pageMode() === 'detail' && selectedPreventivo()) {
 
-    <div class="modal-card">
-        <div class="modal-header">
-            <h3>Dettaglio Preventivo</h3>
+    <button class="btn-primary" (click)="backToList()">
+        <i class="fal fa-arrow-left"></i> Torna alla lista
+    </button>
 
-            <div class="modal-actions">
-                <button class="icon-btn print" (click)="printPreventivo(selectedPreventivo()!)">
-                    <i class="fal fa-print"></i>
-                </button>
-
-                <button class="icon-btn edit" (click)="editPreventivo(selectedPreventivo()!)">
-                    <i class="fal fa-pencil"></i>
-                </button>
-
-                <button class="icon-btn delete" (click)="deletePreventivo(selectedPreventivo()!)">
-                    <i class="fal fa-trash"></i>
-                </button>
-
-                <button class="icon-btn close" (click)="closeDetails()">
-                    <i class="fal fa-times"></i>
-                </button>
-            </div>
-        </div>
+    <div class="table-card">
+        <h2>Dettaglio Preventivo</h2>
 
         <div class="detail-row">
             <span>ID</span>
@@ -100,6 +88,21 @@
             <span>Importo</span>
             <strong>{{ selectedPreventivo()?.importoTotale | number:'1.2-2' }} €</strong>
         </div>
+
+        <div class="modal-actions" style="margin-top: 2rem;">
+            <button class="icon-btn print" (click)="printPreventivo(selectedPreventivo()!)">
+                <i class="fal fa-print"></i>
+            </button>
+
+            <button class="icon-btn edit" (click)="editPreventivo(selectedPreventivo()!)">
+                <i class="fal fa-pencil"></i>
+            </button>
+
+            <button class="icon-btn delete" (click)="deletePreventivo(selectedPreventivo()!)">
+                <i class="fal fa-trash"></i>
+            </button>
+        </div>
+
     </div>
     }
 </div>

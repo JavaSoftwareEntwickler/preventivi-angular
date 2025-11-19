@@ -16,6 +16,7 @@ interface PreventivoModel {
   styleUrl: './preventivo.css',
 })
 export class Preventivo {
+  pageMode = signal<'list' | 'detail'>('list');
 
   // Mock iniziali
   preventivi = signal<PreventivoModel[]>([
@@ -43,8 +44,7 @@ export class Preventivo {
   pageSize = 5;
   currentPage = signal<number>(1);
 
-  // Modale
-  showDetails = signal(false);
+  // Edit
   selectedPreventivo = signal<PreventivoModel | null>(null);
 
   // --- Computed per filtri + sorting + paginazione ---
@@ -94,11 +94,11 @@ export class Preventivo {
 
   openDetails(p: PreventivoModel) {
     this.selectedPreventivo.set(p);
-    this.showDetails.set(true);
+    this.pageMode.set('detail');
   }
 
-  closeDetails() {
-    this.showDetails.set(false);
+  backToList() {
+    this.pageMode.set('list');
     this.selectedPreventivo.set(null);
   }
 
@@ -119,9 +119,7 @@ deletePreventivo(p: PreventivoModel) {
 
   if (conferma) {
     this.preventivi.set(this.preventivi().filter(x => x.id !== p.id));
-    this.closeDetails();
   }
 }
-
 
 }
