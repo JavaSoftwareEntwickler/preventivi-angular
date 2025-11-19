@@ -1,5 +1,6 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface PreventivoModel {
   id: number;
@@ -11,13 +12,24 @@ interface PreventivoModel {
 @Component({
   selector: 'app-preventivo',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './preventivo.html',
   styleUrl: './preventivo.css',
 })
 export class Preventivo {
   pageMode = signal<'list' | 'detail'>('list');
+  // Form minimale aggiunto
+  formPreventivo: FormGroup;
+  isEditing = signal<boolean>(false);
 
+  constructor(private fb: FormBuilder) {
+    this.formPreventivo = this.fb.group({
+      id: [{ value: '', disabled: true }], 
+      nomeCliente: [{ value: '', disabled: true }, Validators.required],
+      dataPreventivo: [{ value: '', disabled: true }, Validators.required],
+      importoTotale: [{ value: '', disabled: true }, [Validators.required, Validators.min(0)]]
+    });
+  }
   // Mock iniziali
   preventivi = signal<PreventivoModel[]>([
     { id: 1, nomeCliente: 'Mario Rossi', dataPreventivo: '2025-01-14', importoTotale: 1200.50 },
@@ -92,15 +104,44 @@ export class Preventivo {
     }
   }
 
+  // --- modificato per popolare il form ---
   openDetails(p: PreventivoModel) {
     this.selectedPreventivo.set(p);
     this.pageMode.set('detail');
+    this.isEditing.set(false);
+
+    this.formPreventivo.patchValue({
+      id: p.id,
+      nomeCliente: p.nomeCliente,
+      dataPreventivo: p.dataPreventivo,
+      importoTotale: p.importoTotale
+    });
+
+    this.formPreventivo.disable();  // ← readonly
   }
 
   backToList() {
     this.pageMode.set('list');
     this.selectedPreventivo.set(null);
   }
+
+  savePreventivo() {
+    if (!this.selectedPreventivo()) return;
+
+    const updated: PreventivoModel = {
+      ...this.selectedPreventivo()!,
+      ...this.formPreventivo.getRawValue() // prende anche disabled fields
+    };
+
+    this.preventivi.set(
+      this.preventivi().map(p => p.id === updated.id ? updated : p)
+    );
+
+    this.isEditing.set(false);
+    this.formPreventivo.disable();
+  }
+
+
 
   nuovoPreventivo() {
     alert('Funzionalità da implementare: apertura form nuovo preventivo');
@@ -110,9 +151,21 @@ export class Preventivo {
     alert('Funzionalità Generazione PDF da implementare per preventivo ID: ' + p.id);
   }
 
-  editPreventivo(p: PreventivoModel) {
-  alert('Funzionalità EDIT da implementare per preventivo ID: ' + p.id);
-}
+  editPreventivo() {
+    this.isEditing.set(true);
+    this.formPreventivo.enable();
+    this.formPreventivo.controls['id'].disable(); // L'ID resta sempre non modificabile
+  }
+  
+  cancelEdit() {
+    if (!this.selectedPreventivo()) return;
+
+    this.isEditing.set(false);
+
+    // Ripristina i valori originali
+    this.formPreventivo.patchValue(this.selectedPreventivo()!);
+    this.formPreventivo.disable();
+  }
 
 deletePreventivo(p: PreventivoModel) {
   const conferma = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');

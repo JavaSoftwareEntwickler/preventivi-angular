@@ -60,49 +60,68 @@
 
     <!-- ****** DETTAGLIO / EDIT INLINE ****** -->
     <!-- ************************************* -->
+
+
+    <!-- contenitore dettaglio con classe slide-in -->
     @if (pageMode() === 'detail' && selectedPreventivo()) {
-
-    <button class="btn-primary" (click)="backToList()">
-        <i class="fal fa-arrow-left"></i> Torna alla lista
-    </button>
-
-    <div class="table-card">
+    <div class="table-card" [formGroup]="formPreventivo">
+        <button class="btn-primary" (click)="backToList()">
+            <i class="fal fa-arrow-left"></i> Torna alla lista
+        </button>
+        @if (!isEditing()) {
         <h2>Dettaglio Preventivo</h2>
-
+        }
+        @if (isEditing()) {
+        <h2>Modifica Preventivo</h2>
+        }
         <div class="detail-row">
-            <span>ID</span>
-            <strong>{{ selectedPreventivo()?.id }}</strong>
+            <label for="id">ID</label>
+            <input id="id" type="text" formControlName="id" />
         </div>
 
         <div class="detail-row">
-            <span>Cliente</span>
-            <strong>{{ selectedPreventivo()?.nomeCliente }}</strong>
+            <label for="nomeCliente">Cliente</label>
+            <input id="nomeCliente" type="text" formControlName="nomeCliente" />
         </div>
 
         <div class="detail-row">
-            <span>Data</span>
-            <strong>{{ selectedPreventivo()?.dataPreventivo }}</strong>
+            <label for="dataPreventivo">Data</label>
+            <input id="dataPreventivo" type="date" formControlName="dataPreventivo" />
         </div>
 
         <div class="detail-row">
-            <span>Importo</span>
-            <strong>{{ selectedPreventivo()?.importoTotale | number:'1.2-2' }} €</strong>
+            <label for="importoTotale">Importo</label>
+            <input id="importoTotale" type="number" formControlName="importoTotale" />
         </div>
 
         <div class="modal-actions" style="margin-top: 2rem;">
+            <!-- EDIT MODE OFF -->
+            @if (!isEditing()) {
             <button class="icon-btn print" (click)="printPreventivo(selectedPreventivo()!)">
                 <i class="fal fa-print"></i>
             </button>
 
-            <button class="icon-btn edit" (click)="editPreventivo(selectedPreventivo()!)">
+            <button class="icon-btn edit" (click)="editPreventivo()">
                 <i class="fal fa-pencil"></i>
             </button>
 
             <button class="icon-btn delete" (click)="deletePreventivo(selectedPreventivo()!)">
                 <i class="fal fa-trash"></i>
             </button>
-        </div>
+            }
 
+            <!-- EDIT MODE ON -->
+            @if (isEditing()) {
+            <button class="icon-btn edit" (click)="savePreventivo()">
+                <i class="fal fa-save"></i>
+            </button>
+
+            <button class="icon-btn close" (click)="cancelEdit()">
+                <i class="fal fa-times"></i>
+            </button>
+            }
+        </div>
     </div>
     }
+
 </div>
