@@ -18,6 +18,8 @@ export class App implements OnInit {
     this.screenWidth.set(window.innerWidth);
     if (this.screenWidth() < 768) {
       this.isLeftSidebarCollapsed.set(true);
+    } else {
+      this.isLeftSidebarCollapsed.set(false);
     }
   }
 
