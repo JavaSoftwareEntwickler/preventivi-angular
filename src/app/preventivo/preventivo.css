@@ -64,6 +64,7 @@
     color: white;
     padding: 12px;
     cursor: pointer;
+    text-align: left;
 }
 
 .styled-table td {
@@ -93,12 +94,16 @@
     cursor: pointer;
 }
 
+.pagination button:hover {
+    opacity: 0.6;
+}
+
 .pagination button:disabled {
     opacity: 0.4;
     cursor: default;
 }
 
-/* Modale */
+/* Modale dettaglio preventivo*/
 .modal-overlay {
     position: fixed;
     inset: 0;
