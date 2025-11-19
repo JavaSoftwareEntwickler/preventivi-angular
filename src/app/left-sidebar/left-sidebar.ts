@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, EventEmitter, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CollapseOnNavigateDirective } from './collapse-on-navigate.directive';
 

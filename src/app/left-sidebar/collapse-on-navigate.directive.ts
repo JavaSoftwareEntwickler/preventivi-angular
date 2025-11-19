@@ -11,7 +11,6 @@ export class CollapseOnNavigateDirective {
   @Input() collapseBreakpoint = BREAKPOINT_SMALL;  // valore di default
   @Output() collapseOnNavigate = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
 
   @HostListener('click')
   onClick() {
