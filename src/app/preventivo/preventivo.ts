@@ -106,6 +106,10 @@ export class Preventivo {
     alert('Funzionalità da implementare: apertura form nuovo preventivo');
   }
 
+  printPreventivo(p: PreventivoModel) {
+    alert('Funzionalità Generazione PDF da implementare per preventivo ID: ' + p.id);
+  }
+
   editPreventivo(p: PreventivoModel) {
   alert('Funzionalità EDIT da implementare per preventivo ID: ' + p.id);
 }

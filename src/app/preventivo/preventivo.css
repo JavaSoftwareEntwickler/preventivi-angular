@@ -115,7 +115,7 @@
     position: fixed;
     background: white;
     padding: 2rem;
-    width: 400px;
+    width: 500px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -167,6 +167,10 @@
 
 .icon-btn:hover {
     background: #e0e0e0;
+}
+
+.icon-btn.print i {
+    color: #077711;
 }
 
 .icon-btn.edit i {
