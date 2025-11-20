@@ -167,12 +167,12 @@ export class Preventivo {
     this.formPreventivo.disable();
   }
 
-deletePreventivo(p: PreventivoModel) {
-  const conferma = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
+  deletePreventivo(p: PreventivoModel) {
+    const conferma = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
 
-  if (conferma) {
-    this.preventivi.set(this.preventivi().filter(x => x.id !== p.id));
+    if (conferma) {
+      this.preventivi.set(this.preventivi().filter(x => x.id !== p.id));
+    }
   }
-}
 
 }
