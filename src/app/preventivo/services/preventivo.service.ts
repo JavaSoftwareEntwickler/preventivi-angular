@@ -10,6 +10,7 @@ export class PreventivoService {
     // page mode + selected
     pageMode = signal<'list' | 'detail'>('list');
     selectedPreventivo = signal<PreventivoModel | null>(null);
+    isCreating = signal<boolean>(false);
 
 
     // dati master
@@ -113,14 +114,45 @@ export class PreventivoService {
     editPreventivo() { this.isEditing.set(true); this.formPreventivo.enable(); this.formPreventivo.controls['id'].disable(); }
     cancelEdit() { if (!this.selectedPreventivo()) return; this.isEditing.set(false); this.formPreventivo.patchValue(this.selectedPreventivo()!); this.formPreventivo.disable(); }
 
-
+    /*
+        savePreventivo() {
+            if (!this.selectedPreventivo()) return;
+            const updated = { 
+                ...this.selectedPreventivo()!,
+                ...this.formPreventivo.getRawValue() 
+            } as PreventivoModel;
+            this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
+            this.isEditing.set(false);
+            this.formPreventivo.disable();
+        }
+            */
     savePreventivo() {
-        if (!this.selectedPreventivo()) return;
-        const updated = { ...this.selectedPreventivo()!, ...this.formPreventivo.getRawValue() } as PreventivoModel;
-        this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
-        this.isEditing.set(false);
-        this.formPreventivo.disable();
+
+        const formValue = this.formPreventivo.getRawValue() as PreventivoModel;
+
+        // INSERT
+        if (this.isCreating()) {
+            this._preventivi.set([...this._preventivi(), formValue]);
+            this.isCreating.set(false);
+            this.isEditing.set(false);
+            this.selectedPreventivo.set(formValue);
+            this.formPreventivo.disable();
+            return;
+        }
+
+        // UPDATE
+        if (this.selectedPreventivo()) {
+            const updated = { ...this.selectedPreventivo()!, ...formValue };
+
+            this._preventivi.set(
+                this._preventivi().map(p => p.id === updated.id ? updated : p)
+            );
+
+            this.isEditing.set(false);
+            this.formPreventivo.disable();
+        }
     }
+
 
     deletePreventivo(p: PreventivoModel) {
         const ok = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
@@ -132,5 +164,24 @@ export class PreventivoService {
     printPreventivo(p: PreventivoModel) { alert('Generazione PDF simulata per preventivo ID: ' + p.id); }
 
 
-    nuovoPreventivo() { alert('Apertura creazione nuovo preventivo - da implementare'); }
+    nuovoPreventivo() {
+        this.selectedPreventivo.set(null);
+        this.pageMode.set('detail');
+
+        this.isCreating.set(true);
+        this.isEditing.set(true);
+
+        const newId = Math.max(...this._preventivi().map(p => p.id)) + 1;
+
+        this.formPreventivo.reset({
+            id: newId,
+            nomeCliente: '',
+            dataPreventivo: '',
+            importoTotale: 0
+        });
+
+        this.formPreventivo.enable();
+        this.formPreventivo.controls['id'].disable();
+    }
+
 }
