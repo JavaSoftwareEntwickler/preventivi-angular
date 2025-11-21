@@ -2,11 +2,14 @@
     <button class="btn-primary" (click)="back.emit()"><i class="fal fa-arrow-left"></i> Torna alla lista</button>
 
 
-    @if (!svc.isEditing()) {
-    <h2>Dettaglio Preventivo</h2>
+    @if (svc.isCreating()) {
+    <h2>Aggiungi Preventivo</h2>
     }
-    @if (svc.isEditing()) {
+    @else if (svc.isEditing()) {
     <h2>Modifica Preventivo</h2>
+    }
+    @else {
+    <h2>Dettaglio Preventivo</h2>
     }
 
 
