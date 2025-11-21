@@ -1,0 +1,15 @@
+<div class="header-row">
+    <h2 class="page-title">Elenco Preventivi</h2>
+    <div class="actions">
+        <app-preventivo-search-bar></app-preventivo-search-bar>
+        <button class="btn-primary" (click)="nuovoPreventivo()"><i class="fal fa-plus"></i> Nuovo Preventivo</button>
+    </div>
+</div>
+
+
+<div class="table-card">
+    <app-preventivo-table (rowClick)="onRowClick($event)"></app-preventivo-table>
+</div>
+
+
+<app-preventivo-pagination></app-preventivo-pagination>

@@ -1,0 +1,18 @@
+<div class="table-card">
+    <button class="btn-primary" (click)="back.emit()"><i class="fal fa-arrow-left"></i> Torna alla lista</button>
+
+
+    @if (!svc.isEditing()) {
+    <h2>Dettaglio Preventivo</h2>
+    }
+    @if (svc.isEditing()) {
+    <h2>Modifica Preventivo</h2>
+    }
+
+
+    <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="svc.formPreventivo"></app-preventivo-form>
+
+
+    <app-preventivo-actions [isEditing]="svc.isEditing()" (edit)="startEdit()" (save)="save()" (cancel)="cancel()"
+        (print)="doPrint()" (delete)="doDelete()"></app-preventivo-actions>
+</div>

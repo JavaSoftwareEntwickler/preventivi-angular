@@ -1,0 +1,25 @@
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.page-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #012a5b
+}
+
+.actions {
+    display: flex;
+    gap: 1rem
+}
+
+.btn-primary {
+    padding: 0.7rem 1.2rem;
+    background: #012a5b;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600
+}

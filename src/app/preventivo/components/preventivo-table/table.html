@@ -1,0 +1,18 @@
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th (click)="changeSort('id')">ID</th>
+            <th (click)="changeSort('nomeCliente')">Cliente</th>
+            <th (click)="changeSort('dataPreventivo')">Data</th>
+            <th (click)="changeSort('importoTotale')">Importo (€)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let p of svc.paginated()" (click)="open(p)">
+            <td>{{p.id}}</td>
+            <td>{{p.nomeCliente}}</td>
+            <td>{{p.dataPreventivo}}</td>
+            <td>{{p.importoTotale | number:'1.2-2'}}</td>
+        </tr>
+    </tbody>
+</table>

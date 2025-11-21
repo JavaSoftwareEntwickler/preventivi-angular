@@ -1,0 +1,1 @@
+describe('PreventivoList (placeholder)', ()=>{ it('ok', ()=> expect(true).toBeTrue()); });

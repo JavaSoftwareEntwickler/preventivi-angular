@@ -1,0 +1,13 @@
+<div class="page-container">
+
+    @if (pageMode() === 'list') {
+    <app-preventivo-list (openDetail)="openDetail($event)">
+    </app-preventivo-list>
+    }
+
+    @if (pageMode() === 'detail') {
+    <app-preventivo-detail [preventivo]="selected()" (back)="backToList()">
+    </app-preventivo-detail>
+    }
+
+</div>

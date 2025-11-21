@@ -1,0 +1,136 @@
+import { Injectable, signal, computed, effect } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+
+
+export interface PreventivoModel { id: number; nomeCliente: string; dataPreventivo: string; importoTotale: number; }
+
+
+@Injectable({ providedIn: 'root' })
+export class PreventivoService {
+    // page mode + selected
+    pageMode = signal<'list' | 'detail'>('list');
+    selectedPreventivo = signal<PreventivoModel | null>(null);
+
+
+    // dati master
+    private _preventivi = signal<PreventivoModel[]>([
+        { id: 1, nomeCliente: 'Mario Rossi', dataPreventivo: '2025-01-14', importoTotale: 1200.50 },
+        { id: 2, nomeCliente: 'Azienda Bianchi asdfasdfasdfasdf SRL', dataPreventivo: '2025-01-18', importoTotale: 4500.00 },
+        { id: 3, nomeCliente: 'Luca Verdi', dataPreventivo: '2025-02-03', importoTotale: 890.00 },
+        { id: 4, nomeCliente: 'Studio Gamma', dataPreventivo: '2025-02-10', importoTotale: 2300.00 },
+        { id: 5, nomeCliente: 'Sigma Love', dataPreventivo: '2025-02-06', importoTotale: 700.00 },
+        { id: 6, nomeCliente: 'Sigma Pippo', dataPreventivo: '2025-08-02', importoTotale: 1230.00 },
+        { id: 7, nomeCliente: 'Sigma Rozzo', dataPreventivo: '2025-08-12', importoTotale: 5235120.00 },
+        { id: 8, nomeCliente: 'Gino Ginello', dataPreventivo: '2025-09-12', importoTotale: 534560.00 },
+        { id: 9, nomeCliente: 'Ciccio Pasticcio', dataPreventivo: '2025-09-12', importoTotale: 5103450.00 },
+        { id: 10, nomeCliente: 'Love you', dataPreventivo: '2025-10-12', importoTotale: 5103330.00 },
+        { id: 11, nomeCliente: 'I am', dataPreventivo: '2025-11-12', importoTotale: 151890.00 }
+    ]);
+    // search / sort / pagination
+    searchTerm = signal<string>('');
+    sortColumn = signal<string>('id');
+    sortDirection = signal<'asc' | 'desc'>('asc');
+    pageSize = 5;
+    currentPage = signal<number>(1);
+
+
+    // reactive form
+    fb = new FormBuilder();
+    formPreventivo = this.fb.group({
+        id: [{ value: 0, disabled: true }],
+        nomeCliente: [{ value: '', disabled: true }, Validators.required],
+        dataPreventivo: [{ value: '', disabled: true }, Validators.required],
+        importoTotale: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0)]]
+    });
+    // computed
+    filtered = computed(() => {
+        const q = this.searchTerm().toLowerCase();
+        return this._preventivi().filter(p => p.nomeCliente.toLowerCase().includes(q));
+    });
+
+
+    sorted = computed(() => {
+        const col = this.sortColumn();
+        const dir = this.sortDirection();
+        return [...this.filtered()].sort((a: any, b: any) => {
+            if (a[col] < b[col]) return dir === 'asc' ? -1 : 1;
+            if (a[col] > b[col]) return dir === 'asc' ? 1 : -1;
+            return 0;
+        });
+    });
+
+    paginated = computed(() => {
+        const start = (this.currentPage() - 1) * this.pageSize;
+        return this.sorted().slice(start, start + this.pageSize);
+    });
+
+
+    totalPages = computed(() => Math.max(1, Math.ceil(this.sorted().length / this.pageSize)));
+
+
+    // expose convenience getters (for templates)
+    get preventivi() { return this._preventivi; }
+
+
+    // effects: keep current page valid when filtered size changes
+    private _sync = effect(() => {
+        const tp = this.totalPages();
+        if (this.currentPage() > tp) this.currentPage.set(tp);
+    });
+
+    // API methods
+    setSearch(value: string) { this.searchTerm.set(value); this.currentPage.set(1); }
+    changeSort(col: string) {
+        if (this.sortColumn() === col) {
+            this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
+        } else {
+            this.sortColumn.set(col);
+            this.sortDirection.set('asc');
+        }
+    }
+    goToPage(page: number) { if (page > 0 && page <= this.totalPages()) this.currentPage.set(page); }
+
+
+    // CRUD / navigation
+    openDetails(p: PreventivoModel) {
+        this.selectedPreventivo.set(p);
+        this.pageMode.set('detail');
+        this.isEditing.set(false);
+
+
+        this.formPreventivo.patchValue({ id: p.id, nomeCliente: p.nomeCliente, dataPreventivo: p.dataPreventivo, importoTotale: p.importoTotale });
+        this.formPreventivo.disable();
+    }
+
+    backToList() {
+        this.pageMode.set('list');
+        this.selectedPreventivo.set(null);
+    }
+
+
+    // editing state
+    isEditing = signal<boolean>(false);
+    editPreventivo() { this.isEditing.set(true); this.formPreventivo.enable(); this.formPreventivo.controls['id'].disable(); }
+    cancelEdit() { if (!this.selectedPreventivo()) return; this.isEditing.set(false); this.formPreventivo.patchValue(this.selectedPreventivo()!); this.formPreventivo.disable(); }
+
+
+    savePreventivo() {
+        if (!this.selectedPreventivo()) return;
+        const updated = { ...this.selectedPreventivo()!, ...this.formPreventivo.getRawValue() } as PreventivoModel;
+        this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
+        this.isEditing.set(false);
+        this.formPreventivo.disable();
+    }
+
+    deletePreventivo(p: PreventivoModel) {
+        const ok = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
+        if (ok) {
+            this._preventivi.set(this._preventivi().filter(x => x.id !== p.id));
+            this.backToList();
+        }
+    }
+    printPreventivo(p: PreventivoModel) { alert('Generazione PDF simulata per preventivo ID: ' + p.id); }
+
+
+    nuovoPreventivo() { alert('Apertura creazione nuovo preventivo - da implementare'); }
+}

@@ -1,0 +1,1 @@
+describe('PreventivoSearchBar (placeholder)', ()=>{ it('ok', ()=> expect(true).toBeTrue()); });

@@ -1,0 +1,24 @@
+.styled-table {
+    width: 100%;
+    border-collapse: collapse
+}
+
+.styled-table th {
+    background: #012a5b;
+    color: white;
+    padding: 12px;
+    cursor: pointer;
+    text-align: left
+}
+
+.styled-table td {
+    padding: 12px
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #ddd
+}
+
+.styled-table tbody tr:hover {
+    background: #e8eef6
+}

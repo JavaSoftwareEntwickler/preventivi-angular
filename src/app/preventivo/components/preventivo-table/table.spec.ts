@@ -1,0 +1,1 @@
+describe('PreventivoTable (placeholder)', ()=>{ it('ok', ()=> expect(true).toBeTrue()); });

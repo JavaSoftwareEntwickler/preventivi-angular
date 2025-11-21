@@ -1,0 +1,17 @@
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #eee
+}
+
+.detail-row label {
+    width: 25%
+}
+
+.detail-row input {
+    width: 70%;
+    padding: 0.5rem;
+    border-radius: 0.312rem;
+    border: 1px solid #ccc
+}

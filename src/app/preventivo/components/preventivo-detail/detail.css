@@ -1,0 +1,14 @@
+.table-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 0.625rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05)
+}
+
+.btn-primary {
+    padding: 0.7rem 1.2rem;
+    background: #012a5b;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem
+}
