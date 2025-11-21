@@ -25,7 +25,7 @@ export class PreventivoDetail {
 
 
     startEdit() { this.svc.editPreventivo(); }
-    save() { this.svc.savePreventivo(); }
+    save() { this.svc.savePreventivo(); this.back.emit(); }
     cancel() { this.svc.cancelEdit(); }
     doPrint() { if (this.preventivo) this.svc.printPreventivo(this.preventivo); }
     doDelete() { if (this.preventivo) this.svc.deletePreventivo(this.preventivo); this.back.emit(); }
