@@ -12,3 +12,10 @@
     border: none;
     border-radius: 0.5rem
 }
+
+.action-title {
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #012a5b
+}

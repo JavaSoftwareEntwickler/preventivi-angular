@@ -11,6 +11,7 @@
 }
 
 .actions {
+    padding: 0.8rem;
     display: flex;
     gap: 1rem
 }
