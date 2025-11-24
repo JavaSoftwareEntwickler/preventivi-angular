@@ -14,4 +14,5 @@ export class PreventivoActions {
     @Output() cancel = new EventEmitter<void>();
     @Output() print = new EventEmitter<void>();
     @Output() delete = new EventEmitter<void>();
+    @Output() addRow = new EventEmitter<void>();
 }

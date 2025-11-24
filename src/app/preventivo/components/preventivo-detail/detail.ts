@@ -25,8 +25,17 @@ export class PreventivoDetail {
 
 
     startEdit() { this.svc.editPreventivo(); }
-    save() { this.svc.savePreventivo(); this.back.emit(); }
+    save() {
+        console.log('salvo');
+        this.svc.savePreventivo(); this.back.emit();
+    }
     cancel() { this.svc.cancelEdit(); this.back.emit(); }
-    doPrint() { if (this.preventivo) this.svc.printPreventivo(this.preventivo); }
+    doPrint() {
+        console.log('stampooooooooooooo');
+        if (this.preventivo) this.svc.printPreventivo(this.preventivo);
+    }
     doDelete() { if (this.preventivo) this.svc.deletePreventivo(this.preventivo); this.back.emit(); }
+    doAddRow() {
+        console.log('Aggiungo riga');
+    }
 }

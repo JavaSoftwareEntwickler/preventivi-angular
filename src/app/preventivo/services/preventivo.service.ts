@@ -1,8 +1,11 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 
-export interface PreventivoModel { id: number; nomeCliente: string; dataPreventivo: string; importoTotale: number; }
+export interface PreventivoModel { id: number; nomeCliente: string; dataPreventivo: string; importoTotale: number; righe: RighePreventivoModel[] }
+
+export interface RighePreventivoModel { descrizione: string; quantita: number; }
+
 
 
 @Injectable({ providedIn: 'root' })
@@ -15,17 +18,17 @@ export class PreventivoService {
 
     // dati master
     private _preventivi = signal<PreventivoModel[]>([
-        { id: 1, nomeCliente: 'Mario Rossi', dataPreventivo: '2025-01-14', importoTotale: 1200.50 },
-        { id: 2, nomeCliente: 'Azienda Bianchi asdfasdfasdfasdf SRL', dataPreventivo: '2025-01-18', importoTotale: 4500.00 },
-        { id: 3, nomeCliente: 'Luca Verdi', dataPreventivo: '2025-02-03', importoTotale: 890.00 },
-        { id: 4, nomeCliente: 'Studio Gamma', dataPreventivo: '2025-02-10', importoTotale: 2300.00 },
-        { id: 5, nomeCliente: 'Sigma Love', dataPreventivo: '2025-02-06', importoTotale: 700.00 },
-        { id: 6, nomeCliente: 'Sigma Pippo', dataPreventivo: '2025-08-02', importoTotale: 1230.00 },
-        { id: 7, nomeCliente: 'Sigma Rozzo', dataPreventivo: '2025-08-12', importoTotale: 5235120.00 },
-        { id: 8, nomeCliente: 'Gino Ginello', dataPreventivo: '2025-09-12', importoTotale: 534560.00 },
-        { id: 9, nomeCliente: 'Ciccio Pasticcio', dataPreventivo: '2025-09-12', importoTotale: 5103450.00 },
-        { id: 10, nomeCliente: 'Love you', dataPreventivo: '2025-10-12', importoTotale: 5103330.00 },
-        { id: 11, nomeCliente: 'I am', dataPreventivo: '2025-11-12', importoTotale: 151890.00 }
+        { id: 1, nomeCliente: 'Mario Rossi', dataPreventivo: '2025-01-14', importoTotale: 1200.50, righe: [{ descrizione: 'Demolizione', quantita: 3 }, { descrizione: 'Imbianchino', quantita: 1 }] },
+        { id: 2, nomeCliente: 'Azienda Bianchi asdfasdfasdfasdf SRL', dataPreventivo: '2025-01-18', importoTotale: 4500.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 3, nomeCliente: 'Luca Verdi', dataPreventivo: '2025-02-03', importoTotale: 890.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 4, nomeCliente: 'Studio Gamma', dataPreventivo: '2025-02-10', importoTotale: 2300.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 5, nomeCliente: 'Sigma Love', dataPreventivo: '2025-02-06', importoTotale: 700.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 6, nomeCliente: 'Sigma Pippo', dataPreventivo: '2025-08-02', importoTotale: 1230.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 7, nomeCliente: 'Sigma Rozzo', dataPreventivo: '2025-08-12', importoTotale: 5235120.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 8, nomeCliente: 'Gino Ginello', dataPreventivo: '2025-09-12', importoTotale: 534560.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 9, nomeCliente: 'Ciccio Pasticcio', dataPreventivo: '2025-09-12', importoTotale: 5103450.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 10, nomeCliente: 'Love you', dataPreventivo: '2025-10-12', importoTotale: 5103330.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
+        { id: 11, nomeCliente: 'I am', dataPreventivo: '2025-11-12', importoTotale: 151890.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] }
     ]);
     // search / sort / pagination
     searchTerm = signal<string>('');
@@ -41,8 +44,10 @@ export class PreventivoService {
         id: [{ value: 0, disabled: true }],
         nomeCliente: [{ value: '', disabled: true }, Validators.required],
         dataPreventivo: [{ value: '', disabled: true }, Validators.required],
-        importoTotale: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0)]]
+        importoTotale: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0)]],
+        righe: this.fb.array([])  // <-- aggiunto qui
     });
+
     // computed
     filtered = computed(() => {
         const q = this.searchTerm().toLowerCase();
@@ -98,8 +103,17 @@ export class PreventivoService {
         this.pageMode.set('detail');
         this.isEditing.set(false);
 
+        this.formPreventivo.patchValue({
+            id: p.id,
+            nomeCliente: p.nomeCliente,
+            dataPreventivo: p.dataPreventivo,
+            importoTotale: p.importoTotale
+        });
 
-        this.formPreventivo.patchValue({ id: p.id, nomeCliente: p.nomeCliente, dataPreventivo: p.dataPreventivo, importoTotale: p.importoTotale });
+        // reset e popolamento righe
+        this.righeFormArray.clear();
+        p.righe.forEach(r => this.righeFormArray.push(this.createRiga(r)));
+
         this.formPreventivo.disable();
     }
 
@@ -111,8 +125,23 @@ export class PreventivoService {
 
     // editing state
     isEditing = signal<boolean>(false);
-    editPreventivo() { this.isEditing.set(true); this.formPreventivo.enable(); this.formPreventivo.controls['id'].disable(); }
-    cancelEdit() { if (!this.selectedPreventivo()) return; this.isEditing.set(false); this.formPreventivo.patchValue(this.selectedPreventivo()!); this.formPreventivo.disable(); }
+    editPreventivo() {
+        this.isEditing.set(true);
+        this.formPreventivo.enable();
+        this.formPreventivo.controls['id'].disable();
+        this.righeFormArray.controls.forEach(ctrl => ctrl.enable());
+    }
+    cancelEdit() {
+        if (!this.selectedPreventivo()) return;
+        this.isEditing.set(false);
+
+        this.formPreventivo.patchValue(this.selectedPreventivo()!);
+
+        this.righeFormArray.clear();
+        this.selectedPreventivo()!.righe.forEach(r => this.righeFormArray.push(this.createRiga(r)));
+
+        this.formPreventivo.disable();
+    }
 
     /*
         savePreventivo() {
@@ -182,6 +211,19 @@ export class PreventivoService {
 
         this.formPreventivo.enable();
         this.formPreventivo.controls['id'].disable();
+    }
+
+    // helper per accedere alle righe
+    get righeFormArray(): FormArray {
+        return this.formPreventivo.get('righe') as FormArray;
+    }
+
+    // metodo per creare una riga
+    private createRiga(r: { descrizione: string; quantita: number }) {
+        return this.fb.group({
+            descrizione: [{ value: r.descrizione, disabled: true }, Validators.required],
+            quantita: [{ value: r.quantita, disabled: true }, Validators.required]
+        });
     }
 
 }

@@ -14,6 +14,9 @@
     </button>
     }
     @if (isEditing) {
+    <button class="icon-btn edit">
+        <i class="fal fa-plus" (click)="addRow.emit()"></i>
+    </button>
     <button class="icon-btn edit" (click)="save.emit()">
         <i class="fal fa-save"></i>
     </button>
@@ -21,6 +24,7 @@
     <button class="icon-btn close" (click)="cancel.emit()">
         <i class="fal fa-times"></i>
     </button>
+
     }
 
 </div>

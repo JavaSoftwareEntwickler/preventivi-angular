@@ -21,4 +21,22 @@
         <label for="importoTotale">Importo</label>
         <input id="importoTotale" type="number" formControlName="importoTotale" name="importoTotale" />
     </div>
+
+    <!-- tabella righe -->
+    <h3 class="page-title">Righe preventivo</h3>
+
+    <table class="righe-table">
+        <thead>
+            <tr>
+                <th>Descrizione</th>
+                <th>Quantità</th>
+            </tr>
+        </thead>
+        <tbody formArrayName="righe">
+            <tr *ngFor="let riga of svc.righeFormArray.controls; let i = index" [formGroupName]="i">
+                <td><input type="text" formControlName="descrizione" /></td>
+                <td><input type="number" formControlName="quantita" /></td>
+            </tr>
+        </tbody>
+    </table>
 </div>

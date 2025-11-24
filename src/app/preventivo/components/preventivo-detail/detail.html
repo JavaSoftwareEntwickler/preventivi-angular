@@ -15,7 +15,6 @@
 
     <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="svc.formPreventivo"></app-preventivo-form>
 
-
     <app-preventivo-actions [isEditing]="svc.isEditing()" (edit)="startEdit()" (save)="save()" (cancel)="cancel()"
-        (print)="doPrint()" (delete)="doDelete()"></app-preventivo-actions>
+        (print)="doPrint()" (delete)="doDelete()" (addRow)="doAddRow()"></app-preventivo-actions>
 </div>
