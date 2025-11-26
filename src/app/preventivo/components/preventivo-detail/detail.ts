@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, computed } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { PreventivoForm } from '../preventivo-form/form';
 import { PreventivoActions } from '../preventivo-actions/actions';
-import { PreventivoService } from '../../services/preventivo.service';
+import { PreventiviService } from '../../services/preventivi.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -19,7 +19,7 @@ export class PreventivoDetail {
     @Output() back = new EventEmitter<void>();
 
 
-    constructor(public svc: PreventivoService) {
+    constructor(public svc: PreventiviService) {
 
     }
 

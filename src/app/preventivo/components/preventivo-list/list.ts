@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PreventivoTable } from '../preventivo-table/table';
 import { PreventivoSearchBar } from '../preventivo-search-bar/search-bar';
 import { PreventivoPagination } from '../preventivo-pagination/pagination';
-import { PreventivoService } from '../../services/preventivo.service';
+import { PreventiviService } from '../../services/preventivi.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ import { PreventivoService } from '../../services/preventivo.service';
 })
 export class PreventivoList {
     @Output() openDetail = new EventEmitter<any>();
-    constructor(public svc: PreventivoService) { }
+    constructor(public svc: PreventiviService) { }
 
 
     nuovoPreventivo() { this.svc.nuovoPreventivo(); }

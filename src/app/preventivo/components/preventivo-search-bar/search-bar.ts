@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PreventivoService } from '../../services/preventivo.service';
+import { PreventiviService } from '../../services/preventivi.service';
 
 
 @Component({
@@ -11,5 +11,5 @@ import { PreventivoService } from '../../services/preventivo.service';
     styleUrls: ['./search-bar.css']
 })
 export class PreventivoSearchBar {
-    constructor(public svc: PreventivoService) { }
+    constructor(public svc: PreventiviService) { }
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PreventivoService } from '../../services/preventivo.service';
+import { PreventiviService } from '../../services/preventivi.service';
 
 
 @Component({
@@ -11,7 +11,7 @@ import { PreventivoService } from '../../services/preventivo.service';
     styleUrls: ['./pagination.css']
 })
 export class PreventivoPagination {
-    constructor(public svc: PreventivoService) { }
+    constructor(public svc: PreventiviService) { }
 
 
     prev() { this.svc.goToPage(this.svc.currentPage() - 1); }

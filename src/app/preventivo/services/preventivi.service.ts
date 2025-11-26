@@ -1,24 +1,57 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-
+import { HttpClient } from '@angular/common/http';
+import { map, Observable } from 'rxjs';
+import { IPreventivo } from '../../../../../server-be/models/IPreventivo';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 export interface PreventivoModel { id: number; nomeCliente: string; dataPreventivo: string; importoTotale: number; righe: RighePreventivoModel[] }
-
 export interface RighePreventivoModel { descrizione: string; quantita: number; }
-
-
+//export interface RighePreventivoModel { descrizione: string; quantita: number; um: String; importo: number; }
 
 @Injectable({ providedIn: 'root' })
-export class PreventivoService {
+export class PreventiviService {
     // page mode + selected
     pageMode = signal<'list' | 'detail'>('list');
     selectedPreventivo = signal<PreventivoModel | null>(null);
     isCreating = signal<boolean>(false);
+    url = 'http://localhost:8088';
+    public _preventivi = signal<PreventivoModel[]>([]);
+
+    constructor(private http: HttpClient) {
+
+        // 1️⃣ carico dal backend e converto in signal
+        const preventivi$ = this.getPreventivi().pipe(
+            map(list => list.map(p => ({
+                id: p.id,
+                nomeCliente: p.nomeCliente,
+                dataPreventivo: p.dataPreventivo,
+                importoTotale: p.importoTotale,
+                righe: [{ descrizione: 'Demolizione', quantita: 3 }]
+            } as PreventivoModel)))
+        );
+
+        const preventiviSignal = toSignal(preventivi$, { initialValue: [] });
+
+        // 2️⃣ sincronizzo il dato nel signal ufficiale dell'app
+        effect(() => {
+            this._preventivi.set(preventiviSignal());
+        });
+    }
+
+    public getPreventivi(): Observable<IPreventivo[]> {
+        return this.http.get<{ status: string, data: IPreventivo[] }>(`${this.url}/preventivi`)
+            .pipe(map(response => response.data))
+    }
 
 
-    // dati master
+    //fare ciclo per popolare il signal
+
+
+
+    /*dati master
     private _preventivi = signal<PreventivoModel[]>([
-        { id: 1, nomeCliente: 'Mario Rossi', dataPreventivo: '2025-01-14', importoTotale: 1200.50, righe: [{ descrizione: 'Demolizione', quantita: 3 }, { descrizione: 'Imbianchino', quantita: 1 }] },
+        { id: 1, nomeCliente: 'Mario Rossi', dataPreventivo: '2025-01-14', importoTotale: 1200.50, righe: [{ descrizione: 'Demolizione', quantita: 3 }, { descrizione: 'Imbianchino', quantita: 1 }, { descrizione: 'Imbianchino', quantita: 1 }, { descrizione: 'Imbianchino', quantita: 1 }] },
         { id: 2, nomeCliente: 'Azienda Bianchi asdfasdfasdfasdf SRL', dataPreventivo: '2025-01-18', importoTotale: 4500.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
         { id: 3, nomeCliente: 'Luca Verdi', dataPreventivo: '2025-02-03', importoTotale: 890.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
         { id: 4, nomeCliente: 'Studio Gamma', dataPreventivo: '2025-02-10', importoTotale: 2300.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
@@ -30,6 +63,7 @@ export class PreventivoService {
         { id: 10, nomeCliente: 'Love you', dataPreventivo: '2025-10-12', importoTotale: 5103330.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] },
         { id: 11, nomeCliente: 'I am', dataPreventivo: '2025-11-12', importoTotale: 151890.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] }
     ]);
+    /*/
     // search / sort / pagination
     searchTerm = signal<string>('');
     sortColumn = signal<string>('id');

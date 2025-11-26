@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PreventivoService } from './services/preventivo.service';
+
 import { PreventivoList } from './components/preventivo-list/list';
 import { PreventivoDetail } from './components/preventivo-detail/detail';
+import { PreventiviService } from './services/preventivi.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { PreventivoDetail } from './components/preventivo-detail/detail';
     styleUrls: ['./preventivo.page.css']
 })
 export class PreventivoPage {
-    private svc = inject(PreventivoService);
+    private svc = inject(PreventiviService);
 
 
     // esponiamo signals utili per il template se necessario

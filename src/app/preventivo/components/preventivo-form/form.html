@@ -4,26 +4,20 @@
         <input id="id" type="text" formControlName="id" name="id" />
     </div>
 
-
     <div class="detail-row">
         <label for="nomeCliente">Cliente</label>
         <input id="nomeCliente" type="text" formControlName="nomeCliente" name="nomeCliente" />
     </div>
-
 
     <div class="detail-row">
         <label for="dataPreventivo">Data</label>
         <input id="dataPreventivo" type="date" formControlName="dataPreventivo" name="dataPreventivo" />
     </div>
 
-
     <div class="detail-row">
         <label for="importoTotale">Importo</label>
         <input id="importoTotale" type="number" formControlName="importoTotale" name="importoTotale" />
     </div>
-
-    <!-- tabella righe -->
-    <h3 class="page-title">Righe preventivo</h3>
 
     <table class="righe-table">
         <thead>
@@ -34,8 +28,8 @@
         </thead>
         <tbody formArrayName="righe">
             <tr *ngFor="let riga of svc.righeFormArray.controls; let i = index" [formGroupName]="i">
-                <td><input type="text" formControlName="descrizione" /></td>
-                <td><input type="number" formControlName="quantita" /></td>
+                <td><input id="descrizione" name="descrizione" type="text" formControlName="descrizione" /></td>
+                <td><input id="quantita" name="quantita" type="number" formControlName="quantita" /></td>
             </tr>
         </tbody>
     </table>

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PreventivoService } from '../../services/preventivo.service';
+import { PreventiviService } from '../../services/preventivi.service';
+
 
 
 @Component({
@@ -12,7 +13,7 @@ import { PreventivoService } from '../../services/preventivo.service';
 })
 export class PreventivoTable {
     @Output() rowClick = new EventEmitter<any>();
-    constructor(public svc: PreventivoService) { }
+    constructor(public svc: PreventiviService) { }
 
 
     changeSort(col: string) { this.svc.changeSort(col); }
