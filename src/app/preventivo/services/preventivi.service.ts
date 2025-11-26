@@ -4,9 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { IPreventivo } from '../../../../../server-be/models/IPreventivo';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { PreventivoModel } from '../models/preventivo-model';
 
-export interface PreventivoModel { id: number; nomeCliente: string; dataPreventivo: string; importoTotale: number; righe: RighePreventivoModel[] }
-export interface RighePreventivoModel { descrizione: string; quantita: number; }
+//export interface PreventivoModel { id: number; nomeCliente: string; dataPreventivo: string; importoTotale: number; righe: RighePreventivoModel[] }
+//export interface RighePreventivoModel { descrizione: string; quantita: number; }
 //export interface RighePreventivoModel { descrizione: string; quantita: number; um: String; importo: number; }
 
 @Injectable({ providedIn: 'root' })
