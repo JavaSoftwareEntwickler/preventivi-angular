@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PaginationService } from '../../../shared/pagination.service';
+import { PreventivoModel } from '../../models/preventivo-model';
 import { PreventiviService } from '../../services/preventivi.service';
 
 
@@ -11,5 +13,7 @@ import { PreventiviService } from '../../services/preventivi.service';
     styleUrls: ['./search-bar.css']
 })
 export class PreventivoSearchBar {
-    constructor(public svc: PreventiviService) { }
+    constructor(public svc: PaginationService<PreventivoModel>, private service: PreventiviService) {
+        this.svc.setData(this.service.preventivi);
+    }
 }

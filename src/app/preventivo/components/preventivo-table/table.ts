@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PreventiviService } from '../../services/preventivi.service';
+import { PaginationService } from '../../../shared/pagination.service';
+import { PreventivoModel } from '../../models/preventivo-model';
 
 
 
@@ -13,9 +15,10 @@ import { PreventiviService } from '../../services/preventivi.service';
 })
 export class PreventivoTable {
     @Output() rowClick = new EventEmitter<any>();
-    constructor(public svc: PreventiviService) { }
-
+    constructor(public service: PreventiviService, public svc: PaginationService<PreventivoModel>) {
+        this.svc.setData(this.service.preventivi);
+    }
 
     changeSort(col: string) { this.svc.changeSort(col); }
-    open(p: any) { this.rowClick.emit(p); this.svc.openDetails(p); }
+    open(p: any) { this.rowClick.emit(p); this.service.openDetails(p); }
 }

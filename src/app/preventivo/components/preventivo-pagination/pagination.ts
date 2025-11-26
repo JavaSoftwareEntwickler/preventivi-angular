@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PaginationService } from '../../../shared/pagination.service';
+import { PreventivoModel } from '../../models/preventivo-model';
 import { PreventiviService } from '../../services/preventivi.service';
 
 
@@ -11,9 +13,9 @@ import { PreventiviService } from '../../services/preventivi.service';
     styleUrls: ['./pagination.css']
 })
 export class PreventivoPagination {
-    constructor(public svc: PreventiviService) { }
-
-
+    constructor(public svc: PaginationService<PreventivoModel>, private service: PreventiviService) {
+        this.svc.setData(this.service.preventivi);
+    }
     prev() { this.svc.goToPage(this.svc.currentPage() - 1); }
     next() { this.svc.goToPage(this.svc.currentPage() + 1); }
 }

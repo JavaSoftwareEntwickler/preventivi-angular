@@ -17,38 +17,27 @@ export class PreventiviService {
     selectedPreventivo = signal<PreventivoModel | null>(null);
     isCreating = signal<boolean>(false);
     url = 'http://localhost:8088';
-    public _preventivi = signal<PreventivoModel[]>([]);
+    _preventivi = signal<PreventivoModel[]>([]);
 
     constructor(private http: HttpClient) {
-
-        // 1️⃣ carico dal backend e converto in signal
-        const preventivi$ = this.getPreventivi().pipe(
-            map(list => list.map(p => ({
-                id: p.id,
-                nomeCliente: p.nomeCliente,
-                dataPreventivo: p.dataPreventivo,
-                importoTotale: p.importoTotale,
-                righe: [{ descrizione: 'Demolizione', quantita: 3 }]
-            } as PreventivoModel)))
-        );
-
-        const preventiviSignal = toSignal(preventivi$, { initialValue: [] });
-
-        // 2️⃣ sincronizzo il dato nel signal ufficiale dell'app
-        effect(() => {
-            this._preventivi.set(preventiviSignal());
-        });
+        this.getPreventivi()
+            .subscribe(data => {
+                this._preventivi.set(data.map(p => ({
+                    id: p.id,
+                    nomeCliente: p.nomeCliente,
+                    dataPreventivo: p.dataPreventivo,
+                    importoTotale: p.importoTotale,
+                    righe: [{ descrizione: 'Demolizione', quantita: 3 }]
+                } as PreventivoModel)))
+            });
     }
 
     public getPreventivi(): Observable<IPreventivo[]> {
-        return this.http.get<{ status: string, data: IPreventivo[] }>(`${this.url}/preventivi`)
-            .pipe(map(response => response.data))
+        return this.http.get<{ status: string, data: IPreventivo[] }>(`${this.url}/preventivi`).pipe(map(response => response.data))
     }
 
-
-    //fare ciclo per popolare il signal
-
-
+    // expose convenience getters (for templates)
+    public get preventivi() { return this._preventivi; }
 
     /*dati master
     private _preventivi = signal<PreventivoModel[]>([
@@ -65,13 +54,6 @@ export class PreventiviService {
         { id: 11, nomeCliente: 'I am', dataPreventivo: '2025-11-12', importoTotale: 151890.00, righe: [{ descrizione: 'Demolizione', quantita: 3 }] }
     ]);
     /*/
-    // search / sort / pagination
-    searchTerm = signal<string>('');
-    sortColumn = signal<string>('id');
-    sortDirection = signal<'asc' | 'desc'>('asc');
-    pageSize = 5;
-    currentPage = signal<number>(1);
-
 
     // reactive form
     fb = new FormBuilder();
@@ -82,55 +64,6 @@ export class PreventiviService {
         importoTotale: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0)]],
         righe: this.fb.array([])  // <-- aggiunto qui
     });
-
-    // computed
-    filtered = computed(() => {
-        const q = this.searchTerm().toLowerCase();
-        return this._preventivi().filter(p => p.nomeCliente.toLowerCase().includes(q));
-    });
-
-
-    sorted = computed(() => {
-        const col = this.sortColumn();
-        const dir = this.sortDirection();
-        return [...this.filtered()].sort((a: any, b: any) => {
-            if (a[col] < b[col]) return dir === 'asc' ? -1 : 1;
-            if (a[col] > b[col]) return dir === 'asc' ? 1 : -1;
-            return 0;
-        });
-    });
-
-    paginated = computed(() => {
-        const start = (this.currentPage() - 1) * this.pageSize;
-        return this.sorted().slice(start, start + this.pageSize);
-    });
-
-
-    totalPages = computed(() => Math.max(1, Math.ceil(this.sorted().length / this.pageSize)));
-
-
-    // expose convenience getters (for templates)
-    get preventivi() { return this._preventivi; }
-
-
-    // effects: keep current page valid when filtered size changes
-    private _sync = effect(() => {
-        const tp = this.totalPages();
-        if (this.currentPage() > tp) this.currentPage.set(tp);
-    });
-
-    // API methods
-    setSearch(value: string) { this.searchTerm.set(value); this.currentPage.set(1); }
-    changeSort(col: string) {
-        if (this.sortColumn() === col) {
-            this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
-        } else {
-            this.sortColumn.set(col);
-            this.sortDirection.set('asc');
-        }
-    }
-    goToPage(page: number) { if (page > 0 && page <= this.totalPages()) this.currentPage.set(page); }
-
 
     // CRUD / navigation
     openDetails(p: PreventivoModel) {
@@ -217,7 +150,6 @@ export class PreventiviService {
         }
     }
 
-
     deletePreventivo(p: PreventivoModel) {
         const ok = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
         if (ok) {
@@ -226,7 +158,6 @@ export class PreventiviService {
         }
     }
     printPreventivo(p: PreventivoModel) { alert('Generazione PDF simulata per preventivo ID: ' + p.id); }
-
 
     nuovoPreventivo() {
         this.selectedPreventivo.set(null);
@@ -249,9 +180,7 @@ export class PreventiviService {
     }
 
     // helper per accedere alle righe
-    get righeFormArray(): FormArray {
-        return this.formPreventivo.get('righe') as FormArray;
-    }
+    get righeFormArray(): FormArray { return this.formPreventivo.get('righe') as FormArray; }
 
     // metodo per creare una riga
     private createRiga(r: { descrizione: string; quantita: number }) {
