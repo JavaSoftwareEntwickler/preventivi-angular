@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { BREAKPOINT_SMALL } from '../config/constants';
+import { BREAKPOINT_SMALL } from '../shared/config/constants';
 
 @Component({
   selector: 'app-main',

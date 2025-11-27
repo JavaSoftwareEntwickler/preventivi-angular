@@ -1,6 +1,6 @@
 import { Directive, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { BREAKPOINT_SMALL } from '../config/constants';
+import { BREAKPOINT_SMALL } from '../shared/config/constants';
 
 @Directive({
   selector: '[collapseOnNavigate]',

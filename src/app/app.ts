@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, signal } from '@angular/core';
 import { LeftSidebar } from './left-sidebar/left-sidebar';
 import { Main } from './main/main';
-import { BREAKPOINT_SMALL } from './config/constants';
+import { BREAKPOINT_SMALL } from './shared/config/constants';
 
 @Component({
   selector: 'app-root',

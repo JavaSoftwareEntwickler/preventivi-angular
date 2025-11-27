@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PreventiviService } from '../../services/preventivi.service';
-import { PaginationService } from '../../../shared/pagination.service';
+import { PaginationService } from '../../../shared/services/pagination.service';
 import { PreventivoModel } from '../../models/preventivo-model';
 
 

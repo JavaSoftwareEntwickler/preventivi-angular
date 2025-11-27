@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PaginationService } from '../../../shared/pagination.service';
+import { PaginationService } from '../../../shared/services/pagination.service';
 import { PreventivoModel } from '../../models/preventivo-model';
 import { PreventiviService } from '../../services/preventivi.service';
 
