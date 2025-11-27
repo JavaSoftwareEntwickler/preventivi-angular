@@ -28,8 +28,9 @@
         </thead>
         <tbody formArrayName="righe">
             <tr *ngFor="let riga of svc.righeFormArray.controls; let i = index" [formGroupName]="i">
-                <td><input id="descrizione" name="descrizione" type="text" formControlName="descrizione" /></td>
-                <td><input id="quantita" name="quantita" type="number" formControlName="quantita" /></td>
+                <td><input [id]="'descrizione_' + i" name="descrizione" type="text" formControlName="descrizione" />
+                </td>
+                <td><input [id]="'quantita' + i" name="quantita" type="number" formControlName="quantita" /></td>
             </tr>
         </tbody>
     </table>
