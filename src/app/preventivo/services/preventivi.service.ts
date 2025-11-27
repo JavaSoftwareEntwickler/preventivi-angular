@@ -2,8 +2,6 @@ import { Injectable, signal, computed, effect } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { IPreventivo } from '../../../../../server-be/models/IPreventivo';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { PreventivoModel } from '../models/preventivo-model';
 
 //export interface PreventivoModel { id: number; nomeCliente: string; dataPreventivo: string; importoTotale: number; righe: RighePreventivoModel[] }
@@ -27,13 +25,16 @@ export class PreventiviService {
                     nomeCliente: p.nomeCliente,
                     dataPreventivo: p.dataPreventivo,
                     importoTotale: p.importoTotale,
-                    righe: [{ descrizione: 'Demolizione', quantita: 3 }]
+                    righe: p.righe.map(r => ({
+                        descrizione: r.descrizione,
+                        quantita: r.quantita
+                    }))
                 } as PreventivoModel)))
             });
     }
 
-    public getPreventivi(): Observable<IPreventivo[]> {
-        return this.http.get<{ status: string, data: IPreventivo[] }>(`${this.url}/preventivi`).pipe(map(response => response.data))
+    public getPreventivi(): Observable<PreventivoModel[]> {
+        return this.http.get<{ status: string, data: PreventivoModel[] }>(`${this.url}/preventivi`).pipe(map(response => response.data))
     }
 
     // expose convenience getters (for templates)
