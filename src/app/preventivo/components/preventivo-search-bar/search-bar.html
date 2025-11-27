@@ -1,2 +1,2 @@
-<input type="text" class="search" placeholder="Cerca cliente..." [value]="svc.searchTerm()"
+<input type="search" class="search" placeholder="Cerca cliente..." [value]="svc.searchTerm()"
     (input)="svc.setSearch($any($event.target).value)" id="serch" name="serch" />
