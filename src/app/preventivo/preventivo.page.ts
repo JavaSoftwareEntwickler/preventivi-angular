@@ -16,16 +16,13 @@ import { PreventiviService } from './services/preventivi.service';
 export class PreventivoPage {
     private svc = inject(PreventiviService);
 
-
     // esponiamo signals utili per il template se necessario
     pageMode = this.svc.pageMode;
     selected = this.svc.selectedPreventivo;
 
-
     openDetail(p: any) {
         this.svc.openDetails(p);
     }
-
 
     backToList() {
         this.svc.backToList();
