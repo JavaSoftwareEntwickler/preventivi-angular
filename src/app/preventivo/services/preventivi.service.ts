@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { PreventivoModel } from '../models/preventivo-model';
+import { CrudService } from '../../shared/services/crud.service';
 
 /**
  * Servizio di gestione dei preventivi.
@@ -12,6 +13,9 @@ import { PreventivoModel } from '../models/preventivo-model';
  * - Gestione dei form per la creazione, modifica ed eliminazione dei preventivi
  * - Gestione dello stato di visualizzazione (list, detail)
  * - Gestione delle righe del preventivo in un FormArray reattivo
+ *
+ * Il servizio sfrutta il `CrudService` generico per eseguire operazioni CRUD 
+ * sui preventivi, migliorando la riusabilità e la manutenibilità del codice.
  *
  * @see PreventivoModel Modello dei dati di un preventivo
  */
@@ -33,8 +37,11 @@ export class PreventiviService {
     /** Lista dei preventivi in memoria */
     private _preventivi = signal<PreventivoModel[]>([]);
 
-    /** Costruttore che inietta il servizio HttpClient per la comunicazione con l'API */
-    constructor(private http: HttpClient) {
+    /** Costruttore che inietta il servizio CrudServise generico 
+     * per eseguire il recupero di tutti i preventivi.
+    */
+    constructor(private crudService: CrudService<PreventivoModel>) {
+        this.crudService.setApiUrl(`${this.url}/preventivi`);
         this.getPreventivi()
             .subscribe(data => {
                 // Inizializza i preventivi
@@ -52,12 +59,12 @@ export class PreventiviService {
     }
 
     /**
-     * Recupera i preventivi tramite una chiamata HTTP GET all'API.
+     * * Recupera i preventivi tramite il servizio CrudService, 
+     *  che gestisce la chiamata HTTP GET.
      * @returns Observable contenente un array di PreventivoModel
      */
     public getPreventivi(): Observable<PreventivoModel[]> {
-        return this.http.get<{ status: string, data: PreventivoModel[] }>(`${this.url}/preventivi`)
-            .pipe(map(response => response.data));
+        return this.crudService.getAll();
     }
 
     /** Getter pubblico per accedere ai preventivi */
