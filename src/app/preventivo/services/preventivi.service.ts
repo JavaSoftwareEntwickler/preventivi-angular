@@ -57,6 +57,7 @@ export class PreventiviService {
                     dataPreventivo: p.dataPreventivo,
                     importoTotale: p.importoTotale,
                     righe: p.righe.map(r => ({
+                        id: r.id,
                         descrizione: r.descrizione,
                         quantita: r.quantita
                     }))

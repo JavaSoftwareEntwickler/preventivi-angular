@@ -29,10 +29,10 @@ export class PreventivoFormAdapter {
 
         // Resetta e popola le righe del preventivo
         form.get('righe').clear();
-
         model.righe.forEach(r =>
             form.get('righe').push(
                 this.fb.group({
+                    id: r.id,
                     descrizione: [r.descrizione, Validators.required],
                     quantita: [r.quantita, Validators.required]
                 })
@@ -43,9 +43,11 @@ export class PreventivoFormAdapter {
     /** Mapping form → model */
     mapToModel(form: any): PreventivoModel {
         const raw = form.getRawValue();
+        // Stampa il valore grezzo del form
         return {
             ...raw,
             righe: raw.righe.map((r: any) => ({
+                id: r.id,
                 descrizione: r.descrizione,
                 quantita: r.quantita
             }))
@@ -90,8 +92,9 @@ export class PreventivoFormAdapter {
      * @param r Riga del preventivo da trasformare in form group
      * @returns FormGroup per la riga
      */
-    createRiga(r?: { descrizione: string; quantita: number }): FormGroup {
+    createRiga(r?: { id: number, descrizione: string; quantita: number }): FormGroup {
         return this.fb.group({
+            id: r?.id,
             descrizione: [r?.descrizione ?? '', Validators.required],
             quantita: [r?.quantita ?? 1, Validators.required],
         });
@@ -99,6 +102,7 @@ export class PreventivoFormAdapter {
 
     addRiga(form: FormGroup,
         r?: {
+            id: number,
             descrizione: string;
             quantita: number
         }) {
