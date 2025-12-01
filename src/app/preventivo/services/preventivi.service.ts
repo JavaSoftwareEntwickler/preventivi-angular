@@ -158,37 +158,35 @@ export class PreventiviService {
         const newId = Math.max(...this._preventivi().map(p => p.id)) + 1;
 
         // Resetta il form per la creazione di un nuovo preventivo
-        this.formPreventivo.reset({
-            id: newId,
-            nomeCliente: '',
-            dataPreventivo: '',
-            importoTotale: 0
-        });
+        this.formAdapter.prepareFormForNew(this.formPreventivo);
 
-        this.formPreventivo.enable();
-        this.formPreventivo.controls['id'].disable();
     }
 
     /**
-     * Salva un nuovo preventivo o aggiorna un preventivo esistente
+     * Creazione o Update del preventivo:
+     * -Salva un nuovo preventivo o aggiorna un preventivo esistente
+     * -Imposta lo stato dei segnali
+     * -Aggiorna il preventivo alla lista locale signal
      */
     savePreventivo() {
         const formValuePerSignal = this.formAdapter.mapToModel(this.formPreventivo);
-
         // Se stiamo creando un nuovo preventivo
         if (this.isCreating()) {
             this.crudService.setApiUrl(`${this.url}/preventivo`);
 
             // Chiamata al servizio per creare il preventivo
-            this.crudService.create(formValuePerSignal).subscribe({});
-
-            // Aggiungi il preventivo alla lista locale signal
-            this._preventivi.set([...this._preventivi(), formValuePerSignal]);
-            // Imposta lo stato dei segnali
-            this.isCreating.set(false);
-            this.isEditing.set(false);
-            this.selectedPreventivo.set(formValuePerSignal);
-            this.formPreventivo.disable();
+            this.crudService.create(formValuePerSignal).subscribe({
+                next: (preventivoCreato) => {
+                    formValuePerSignal.id = preventivoCreato.id;
+                    // Aggiungi il preventivo alla lista locale signal
+                    this._preventivi.set([...this._preventivi(), formValuePerSignal]);
+                    // Imposta lo stato dei segnali
+                    this.isCreating.set(false);
+                    this.isEditing.set(false);
+                    this.selectedPreventivo.set(formValuePerSignal);
+                    this.formPreventivo.disable();
+                }
+            });
         }
 
         // Se stiamo aggiornando un preventivo esistente
@@ -197,6 +195,7 @@ export class PreventiviService {
             console.log(formValuePerSignal);
             this.crudService.setApiUrl(`${this.url}/preventivi`);
             this.crudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({});
+            // Aggiorna il preventivo alla lista locale signal
             this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
             this.isEditing.set(false);
             this.formPreventivo.disable();
