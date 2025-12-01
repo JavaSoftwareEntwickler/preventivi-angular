@@ -27,6 +27,7 @@ export class PreventivoFormAdapter {
             importoTotale: model.importoTotale,
         });
 
+        // Resetta e popola le righe del preventivo
         form.get('righe').clear();
 
         model.righe.forEach(r =>
@@ -49,6 +50,27 @@ export class PreventivoFormAdapter {
                 quantita: r.quantita
             }))
         };
+    }
+
+    /**
+     * Prepara il form per un nuovo preventivo
+     * - Resetta i campi del form
+     * - Aggiunge una riga vuota per l'inserimento di una riga al preventivo
+     */
+    prepareFormForNew(form: FormGroup) {
+        form.reset({
+            id: null,
+            nomeCliente: '',
+            dataPreventivo: '',
+            importoTotale: 0
+        });
+
+        // Resetta e aggiungi una riga vuota
+        this.resetRighe(form);
+        this.addRiga(form);  // Aggiungi una riga vuota
+
+        form.enable();
+        form.controls['id'].disable();
     }
 
     // -------------------------------
