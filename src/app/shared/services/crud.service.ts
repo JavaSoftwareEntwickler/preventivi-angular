@@ -60,7 +60,8 @@ export class CrudService<T> {
      * @returns Un `Observable` che emette l'elemento creato.
      */
     create(item: T): Observable<T> {
-        return this.http.post<T>(`${this.apiUrl}`, item, this.httpOptions).pipe(
+        return this.http.post<{ status: string, data: T }>(`${this.apiUrl}`, item, this.httpOptions).pipe(
+            map(response => response.data),  // Mappa i dati della risposta all'array di oggetti `T`
             catchError(this.handleError<T>('create'))
         );
     }
@@ -104,7 +105,8 @@ export class CrudService<T> {
      * @returns Un `Observable` che emette l'elemento aggiornato.
      */
     update(id: number, item: T): Observable<T> {
-        return this.http.put<T>(`${this.apiUrl}/${id}`, item, this.httpOptions).pipe(
+        return this.http.put<{ status: string, data: T }>(`${this.apiUrl}/${id}`, item, this.httpOptions).pipe(
+            map(response => response.data),  // Mappa i dati della risposta all'array di oggetti `T`
             catchError(this.handleError<T>('update'))
         );
     }
@@ -118,7 +120,8 @@ export class CrudService<T> {
      * @returns Un `Observable` che emette l'elemento eliminato.
      */
     delete(id: number): Observable<T> {
-        return this.http.delete<T>(`${this.apiUrl}/${id}`).pipe(
+        return this.http.delete<{ status: string, data: T }>(`${this.apiUrl}/${id}`).pipe(
+            map(response => response.data),  // Mappa i dati della risposta all'array di oggetti `T`
             catchError(this.handleError<T>('delete'))
         );
     }
