@@ -1,8 +1,10 @@
 <div class="table-card" [formGroup]="formPreventivo">
+    <!--     
     <div class="detail-row">
         <label for="id">ID</label>
         <input id="id" type="text" formControlName="id" name="id" />
-    </div>
+    </div> 
+    -->
 
     <div class="detail-row">
         <label for="nomeCliente">Cliente</label>
@@ -27,7 +29,7 @@
             </tr>
         </thead>
         <tbody formArrayName="righe">
-            <tr *ngFor="let riga of svc.righeFormArray.controls; let i = index" [formGroupName]="i">
+            <tr *ngFor="let riga of frmAdapter.getRighe(formPreventivo).controls; let i = index" [formGroupName]="i">
                 <td><input [id]="'descrizione_' + i" name="descrizione" type="text" formControlName="descrizione" />
                 </td>
                 <td><input [id]="'quantita' + i" name="quantita" type="number" formControlName="quantita" /></td>

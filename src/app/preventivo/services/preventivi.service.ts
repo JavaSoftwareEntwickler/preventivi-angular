@@ -1,9 +1,10 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { PreventivoModel } from '../models/preventivo-model';
 import { CrudService } from '../../shared/services/crud.service';
+import { PreventivoFormAdapter } from '../components/preventivo-form/PreventivoFormAdapter';
 
 /**
  * Servizio di gestione dei preventivi.
@@ -37,10 +38,16 @@ export class PreventiviService {
     /** Lista dei preventivi in memoria */
     private _preventivi = signal<PreventivoModel[]>([]);
 
-    /** Costruttore che inietta il servizio CrudServise generico 
-     * per eseguire il recupero di tutti i preventivi.
+    /** Form creato dal FormAdapter */
+    formPreventivo: FormGroup;
+
+    /** Costruttore che inietta :
+     * -il servizio CrudServise generico 
+     *  per eseguire il recupero di tutti i preventivi.
+     * -il form adapter 
     */
-    constructor(private crudService: CrudService<PreventivoModel>) {
+    constructor(private crudService: CrudService<PreventivoModel>, private formAdapter: PreventivoFormAdapter) {
+        this.formPreventivo = this.formAdapter.buildForm();
         this.crudService.setApiUrl(`${this.url}/preventivi`);
         this.getPreventivi()
             .subscribe(data => {
@@ -74,17 +81,6 @@ export class PreventiviService {
     // Gestione Form (Reactive Forms)
     // -------------------
 
-    /** Costruttore del FormBuilder per la creazione dei form */
-    fb = new FormBuilder();
-
-    /** Form di gestione del preventivo */
-    formPreventivo = this.fb.group({
-        id: [{ value: 0, disabled: true }],
-        nomeCliente: [{ value: '', disabled: true }, Validators.required],
-        dataPreventivo: [{ value: '', disabled: true }, Validators.required],
-        importoTotale: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0)]],
-        righe: this.fb.array([])  // <-- aggiunto per gestire le righe del preventivo
-    });
 
     // -------------------
     // Funzioni CRUD (Create, Read, Update, Delete)
@@ -100,16 +96,12 @@ export class PreventiviService {
         this.isEditing.set(false);
 
         // Popola il form con i dettagli del preventivo selezionato
-        this.formPreventivo.patchValue({
-            id: p.id,
-            nomeCliente: p.nomeCliente,
-            dataPreventivo: p.dataPreventivo,
-            importoTotale: p.importoTotale
-        });
+        /** ⬇️ Patching delegato al FormAdapter */
+        this.formAdapter.patch(p, this.formPreventivo);
 
         // Resetta e popola le righe del preventivo
-        this.righeFormArray.clear();
-        p.righe.forEach(r => this.righeFormArray.push(this.createRiga(r)));
+        //this.righeFormArray.clear();
+        //p.righe.forEach(r => this.righeFormArray.push(this.createRiga(r)));
 
         // Disabilita il form per la visualizzazione dei dettagli
         this.formPreventivo.disable();
@@ -135,7 +127,7 @@ export class PreventiviService {
         this.isEditing.set(true);
         this.formPreventivo.enable();
         this.formPreventivo.controls['id'].disable(); // Il campo ID non può essere modificato
-        this.righeFormArray.controls.forEach(ctrl => ctrl.enable()); // Abilita le righe
+        this.formAdapter.abilitaRighe(this.formPreventivo); // Abilita le righe
     }
 
     /**
@@ -146,66 +138,11 @@ export class PreventiviService {
         this.isEditing.set(false);
 
         // Ripristina i valori originali del preventivo
-        this.formPreventivo.patchValue(this.selectedPreventivo()!);
-
-        // Ripristina le righe
-        this.righeFormArray.clear();
-        this.selectedPreventivo()!.righe.forEach(r => this.righeFormArray.push(this.createRiga(r)));
+        /** ⬇️ Ripristino patch tramite adapter */
+        this.formAdapter.patch(this.selectedPreventivo()!, this.formPreventivo);
 
         // Disabilita il form
         this.formPreventivo.disable();
-    }
-
-    /**
-     * Salva un nuovo preventivo o aggiorna un preventivo esistente
-     */
-    savePreventivo() {
-        const formValuePerSignal = this.formPreventivo.getRawValue() as PreventivoModel;
-
-        // Se stiamo creando un nuovo preventivo
-        if (this.isCreating()) {
-            this.crudService.setApiUrl(`${this.url}/preventivi/crea`);
-
-            // Chiamata al servizio per creare il preventivo
-            this.crudService.create(formValuePerSignal).subscribe({});
-
-            // Aggiungi il preventivo alla lista locale signal
-            this._preventivi.set([...this._preventivi(), formValuePerSignal]);
-            // Imposta lo stato dei segnali
-            this.isCreating.set(false);
-            this.isEditing.set(false);
-            this.selectedPreventivo.set(formValuePerSignal);
-            this.formPreventivo.disable();
-        }
-
-        // Se stiamo aggiornando un preventivo esistente
-        if (this.selectedPreventivo()) {
-            const updated = { ...this.selectedPreventivo()!, ...formValuePerSignal };
-            this.crudService.update(formValuePerSignal.id, formValuePerSignal);
-            this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
-            this.isEditing.set(false);
-            this.formPreventivo.disable();
-        }
-    }
-
-    /**
-     * Elimina un preventivo dal sistema
-     * @param p Preventivo da eliminare
-     */
-    deletePreventivo(p: PreventivoModel) {
-        const ok = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
-        if (ok) {
-            this._preventivi.set(this._preventivi().filter(x => x.id !== p.id));
-            this.backToList();
-        }
-    }
-
-    /**
-     * Funzione simulata per generare un PDF del preventivo
-     * @param p Preventivo di cui generare il PDF
-     */
-    printPreventivo(p: PreventivoModel) {
-        alert('Generazione PDF simulata per preventivo ID: ' + p.id);
     }
 
     /**
@@ -232,23 +169,66 @@ export class PreventiviService {
         this.formPreventivo.controls['id'].disable();
     }
 
+    /**
+     * Salva un nuovo preventivo o aggiorna un preventivo esistente
+     */
+    savePreventivo() {
+        const formValuePerSignal = this.formAdapter.mapToModel(this.formPreventivo);
+
+        // Se stiamo creando un nuovo preventivo
+        if (this.isCreating()) {
+            this.crudService.setApiUrl(`${this.url}/preventivo`);
+
+            // Chiamata al servizio per creare il preventivo
+            this.crudService.create(formValuePerSignal).subscribe({});
+
+            // Aggiungi il preventivo alla lista locale signal
+            this._preventivi.set([...this._preventivi(), formValuePerSignal]);
+            // Imposta lo stato dei segnali
+            this.isCreating.set(false);
+            this.isEditing.set(false);
+            this.selectedPreventivo.set(formValuePerSignal);
+            this.formPreventivo.disable();
+        }
+
+        // Se stiamo aggiornando un preventivo esistente
+        if (this.isEditing() && this.selectedPreventivo()) {
+            const updated = { ...this.selectedPreventivo()!, ...formValuePerSignal };
+            console.log(formValuePerSignal);
+            this.crudService.setApiUrl(`${this.url}/preventivi`);
+            this.crudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({});
+            this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
+            this.isEditing.set(false);
+            this.formPreventivo.disable();
+        }
+    }
+
+    /**
+     * Elimina un preventivo dal sistema
+     * @param p Preventivo da eliminare
+     */
+    deletePreventivo(p: PreventivoModel) {
+        const ok = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
+        if (ok) {
+            this._preventivi.set(this._preventivi().filter(x => x.id !== p.id));
+            this.crudService.delete(p.id).subscribe({});
+            this.backToList();
+        }
+    }
+
+    /**
+     * Funzione simulata per generare un PDF del preventivo
+     * @param p Preventivo di cui generare il PDF
+     */
+    printPreventivo(p: PreventivoModel) {
+        alert('Generazione PDF simulata per preventivo ID: ' + p.id);
+    }
+
+
+
     // -------------------
     // Gestione delle righe del preventivo
     // -------------------
 
-    /** Helper per ottenere l'array delle righe nel form */
-    get righeFormArray(): FormArray { return this.formPreventivo.get('righe') as FormArray; }
-
-    /**
-     * Crea un form group per una singola riga del preventivo
-     * @param r Riga del preventivo da trasformare in form group
-     * @returns FormGroup per la riga
-     */
-    private createRiga(r: { descrizione: string; quantita: number }) {
-        return this.fb.group({
-            descrizione: [{ value: r.descrizione, disabled: true }, Validators.required],
-            quantita: [{ value: r.quantita, disabled: true }, Validators.required]
-        });
-    }
-
+    //get righeFormArray(): FormArray { return this.formPreventivo.get('righe') as FormArray }
 }

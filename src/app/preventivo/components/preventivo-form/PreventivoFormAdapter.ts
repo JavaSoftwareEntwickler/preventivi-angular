@@ -1,0 +1,94 @@
+import { Injectable } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PreventivoModel } from '../../models/preventivo-model';
+
+@Injectable({ providedIn: 'root' })
+export class PreventivoFormAdapter {
+
+    constructor(private fb: FormBuilder) { }
+
+    /** Costruzione form */
+    buildForm() {
+        return this.fb.group({
+            id: [{ value: 0, disabled: true }],
+            nomeCliente: ['', Validators.required],
+            dataPreventivo: ['', Validators.required],
+            importoTotale: [0, [Validators.required, Validators.min(0)]],
+            righe: this.fb.array([]),
+        });
+    }
+
+    /** Mapping model → form */
+    patch(model: PreventivoModel, form: any) {
+        form.patchValue({
+            id: model.id,
+            nomeCliente: model.nomeCliente,
+            dataPreventivo: model.dataPreventivo,
+            importoTotale: model.importoTotale,
+        });
+
+        form.get('righe').clear();
+
+        model.righe.forEach(r =>
+            form.get('righe').push(
+                this.fb.group({
+                    descrizione: [r.descrizione, Validators.required],
+                    quantita: [r.quantita, Validators.required]
+                })
+            )
+        );
+    }
+
+    /** Mapping form → model */
+    mapToModel(form: any): PreventivoModel {
+        const raw = form.getRawValue();
+        return {
+            ...raw,
+            righe: raw.righe.map((r: any) => ({
+                descrizione: r.descrizione,
+                quantita: r.quantita
+            }))
+        };
+    }
+
+    // -------------------------------
+    // GESTIONE RIGHE (isolata e pulita)
+    // -------------------------------
+    getRighe(form: FormGroup): FormArray {
+        return form.get('righe') as FormArray;
+    }
+
+    abilitaRighe(form: FormGroup) {
+        this.getRighe(form).controls.forEach(ctrl => ctrl.enable());
+    }
+
+    /**
+     * Aggiusta i commenti
+     * Crea un form group per una singola riga del preventivo
+     * @param r Riga del preventivo da trasformare in form group
+     * @returns FormGroup per la riga
+     */
+    createRiga(r?: { descrizione: string; quantita: number }): FormGroup {
+        return this.fb.group({
+            descrizione: [r?.descrizione ?? '', Validators.required],
+            quantita: [r?.quantita ?? 1, Validators.required],
+        });
+    }
+
+    addRiga(form: FormGroup,
+        r?: {
+            descrizione: string;
+            quantita: number
+        }) {
+        this.getRighe(form).push(this.createRiga(r));
+    }
+
+    removeRiga(form: FormGroup, index: number) {
+        this.getRighe(form).removeAt(index);
+    }
+
+    resetRighe(form: FormGroup) {
+        this.getRighe(form).clear();
+    }
+
+}
