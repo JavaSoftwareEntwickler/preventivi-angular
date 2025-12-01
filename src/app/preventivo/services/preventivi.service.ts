@@ -1,7 +1,6 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { Injectable, signal, } from '@angular/core';
+import { FormGroup, } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { PreventivoModel } from '../models/preventivo-model';
 import { CrudService } from '../../shared/services/crud.service';
 import { PreventivoFormAdapter } from '../components/preventivo-form/PreventivoFormAdapter';
@@ -172,34 +171,38 @@ export class PreventiviService {
         const formValuePerSignal = this.formAdapter.mapToModel(this.formPreventivo);
         // Se stiamo creando un nuovo preventivo
         if (this.isCreating()) {
-            this.crudService.setApiUrl(`${this.url}/preventivo`);
-
             // Chiamata al servizio per creare il preventivo
-            this.crudService.create(formValuePerSignal).subscribe({
-                next: (preventivoCreato) => {
-                    formValuePerSignal.id = preventivoCreato.id;
-                    // Aggiungi il preventivo alla lista locale signal
-                    this._preventivi.set([...this._preventivi(), formValuePerSignal]);
-                    // Imposta lo stato dei segnali
-                    this.isCreating.set(false);
-                    this.isEditing.set(false);
-                    this.selectedPreventivo.set(formValuePerSignal);
-                    this.formPreventivo.disable();
-                }
-            });
+            this.creaPreventivo(formValuePerSignal);
         }
-
         // Se stiamo aggiornando un preventivo esistente
         if (this.isEditing() && this.selectedPreventivo()) {
-            const updated = { ...this.selectedPreventivo()!, ...formValuePerSignal };
-            console.log(formValuePerSignal);
-            this.crudService.setApiUrl(`${this.url}/preventivi`);
-            this.crudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({});
-            // Aggiorna il preventivo alla lista locale signal
-            this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
-            this.isEditing.set(false);
-            this.formPreventivo.disable();
+            this.aggiornaPreventivo(formValuePerSignal);
         }
+    }
+
+    private creaPreventivo(formValuePerSignal: PreventivoModel) {
+        this.crudService.create(formValuePerSignal).subscribe({
+            next: (preventivoCreato) => {
+                formValuePerSignal.id = preventivoCreato.id;
+                // Aggiungi il preventivo alla lista locale signal
+                this._preventivi.set([...this._preventivi(), formValuePerSignal]);
+                // Imposta lo stato dei segnali
+                this.isCreating.set(false);
+                this.isEditing.set(false);
+                this.selectedPreventivo.set(formValuePerSignal);
+                this.formPreventivo.disable();
+            }
+        });
+    }
+
+    private aggiornaPreventivo(formValuePerSignal: PreventivoModel) {
+        const updated = { ...this.selectedPreventivo()!, ...formValuePerSignal };
+        console.log(formValuePerSignal);
+        this.crudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({});
+        // Aggiorna il preventivo alla lista locale signal
+        this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
+        this.isEditing.set(false);
+        this.formPreventivo.disable();
     }
 
     /**
@@ -222,12 +225,4 @@ export class PreventiviService {
     printPreventivo(p: PreventivoModel) {
         alert('Generazione PDF simulata per preventivo ID: ' + p.id);
     }
-
-
-
-    // -------------------
-    // Gestione delle righe del preventivo
-    // -------------------
-
-    //get righeFormArray(): FormArray { return this.formPreventivo.get('righe') as FormArray }
 }
