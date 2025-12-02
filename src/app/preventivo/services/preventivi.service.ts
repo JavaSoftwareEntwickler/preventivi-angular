@@ -157,9 +157,6 @@ export class PreventiviService {
         this.isCreating.set(true);
         this.isEditing.set(true);
 
-        // Assegna un nuovo ID al preventivo
-        const newId = Math.max(...this._preventivi().map(p => p.id)) + 1;
-
         // Resetta il form per la creazione di un nuovo preventivo
         this.formAdapter.prepareFormForNew(this.formPreventivo);
 
@@ -189,7 +186,7 @@ export class PreventiviService {
             next: (preventivoCreato) => {
                 formValuePerSignal.id = preventivoCreato.id;
                 // Aggiungi il preventivo alla lista locale signal
-                this._preventivi.set([...this._preventivi(), formValuePerSignal]);
+                this._preventivi.set([...this._preventivi(), preventivoCreato]);
                 // Imposta lo stato dei segnali
                 this.isCreating.set(false);
                 this.isEditing.set(false);
@@ -201,12 +198,18 @@ export class PreventiviService {
 
     private aggiornaPreventivo(formValuePerSignal: PreventivoModel) {
         const updated = { ...this.selectedPreventivo()!, ...formValuePerSignal };
-        console.log(formValuePerSignal);
-        this.crudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({});
-        // Aggiorna il preventivo alla lista locale signal
-        this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
-        this.isEditing.set(false);
-        this.formPreventivo.disable();
+        console.log("formValuePerSignal in aggiorna preve", formValuePerSignal);
+        this.crudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({
+            next: (preventivoAggiornato) => {
+
+                // Aggiorna il preventivo alla lista locale signal
+                this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
+                // Imposta lo stato dei segnali
+                this.isEditing.set(false);
+                this.formPreventivo.disable();
+            }
+        });
+
     }
 
     /**
