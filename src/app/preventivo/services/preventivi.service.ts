@@ -198,7 +198,6 @@ export class PreventiviService {
 
     private aggiornaPreventivo(formValuePerSignal: PreventivoModel) {
         const updated = { ...this.selectedPreventivo()!, ...formValuePerSignal };
-        console.log("formValuePerSignal in aggiorna preve", formValuePerSignal);
         this.crudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({
             next: (preventivoAggiornato) => {
 
