@@ -34,7 +34,10 @@ export class PreventivoFormAdapter {
                 this.fb.group({
                     id: r.id,
                     descrizione: [r.descrizione, Validators.required],
-                    quantita: [r.quantita, Validators.required]
+                    um: [r.um, Validators.required],
+                    quantita: [r.quantita, Validators.required],
+                    importo: [r.importo, Validators.required],
+                    importoTotale: [r.importoTotale, Validators.required]
                 })
             )
         );
@@ -49,7 +52,10 @@ export class PreventivoFormAdapter {
             righe: raw.righe.map((r: any) => ({
                 id: r.id,
                 descrizione: r.descrizione,
-                quantita: r.quantita
+                um: r.um,
+                quantita: r.quantita,
+                importo: r.importo,
+                importoTotale: r.importoTotale,
             }))
         };
     }
@@ -92,19 +98,25 @@ export class PreventivoFormAdapter {
      * @param r Riga del preventivo da trasformare in form group
      * @returns FormGroup per la riga
      */
-    createRiga(r?: { id: number, descrizione: string; quantita: number }): FormGroup {
+    createRiga(r?: { id: number, descrizione: string; um: string, quantita: number, importo: number, importoTotale: number }): FormGroup {
         return this.fb.group({
             id: r?.id,
             descrizione: [r?.descrizione ?? '', Validators.required],
+            um: [r?.um ?? '', Validators.required],
             quantita: [r?.quantita ?? 1, Validators.required],
+            importo: [r?.importo ?? 1, Validators.required],
+            importoTotale: [r?.importoTotale ?? 1, Validators.required]
         });
     }
 
     addRiga(form: FormGroup,
         r?: {
             id: number,
-            descrizione: string;
-            quantita: number
+            descrizione: string,
+            um: string,
+            quantita: number,
+            importo: number,
+            importoTotale: number,
         }) {
         this.getRighe(form).push(this.createRiga(r));
     }

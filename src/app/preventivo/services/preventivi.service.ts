@@ -59,7 +59,10 @@ export class PreventiviService {
                     righe: p.righe.map(r => ({
                         id: r.id,
                         descrizione: r.descrizione,
-                        quantita: r.quantita
+                        um: r.um,
+                        quantita: r.quantita,
+                        importo: r.importo,
+                        importoTotale: r.importoTotale,
                     }))
                 } as PreventivoModel)))
             });
