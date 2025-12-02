@@ -26,6 +26,10 @@
             <tr>
                 <th>Descrizione</th>
                 <th>Quantità</th>
+                @if (isEditing) {
+                <th>Azione</th>
+                }
+
             </tr>
         </thead>
         <tbody formArrayName="righe">
@@ -33,6 +37,10 @@
                 <td><input [id]="'descrizione_' + i" name="descrizione" type="text" formControlName="descrizione" />
                 </td>
                 <td><input [id]="'quantita' + i" name="quantita" type="number" formControlName="quantita" /></td>
+                @if (isEditing) {
+                <td class="actions"><button class="icon-btn delete"><i class="fal fa-trash"></i></button></td>
+                }
+
             </tr>
         </tbody>
     </table>

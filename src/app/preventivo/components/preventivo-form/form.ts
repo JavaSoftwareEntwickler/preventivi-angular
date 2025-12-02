@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { PreventiviService } from '../../services/preventivi.service';
 import { PreventivoFormAdapter } from './PreventivoFormAdapter';
 
 
@@ -15,6 +14,7 @@ import { PreventivoFormAdapter } from './PreventivoFormAdapter';
 export class PreventivoForm implements OnChanges {
     @Input() preventivo: any | null = null;
     @Input() formPreventivo!: FormGroup; // <- passiamo il form dal padre
+    @Input() isEditing = false;
     constructor(public frmAdapter: PreventivoFormAdapter) { }
 
 

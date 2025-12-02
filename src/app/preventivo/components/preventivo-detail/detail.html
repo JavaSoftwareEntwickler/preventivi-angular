@@ -13,7 +13,8 @@
         }
     </div>
 
-    <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="svc.formPreventivo"></app-preventivo-form>
+    <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="svc.formPreventivo"
+        [isEditing]="svc.isEditing()"></app-preventivo-form>
 
     <app-preventivo-actions [isEditing]="svc.isEditing()" (edit)="startEdit()" (save)="save()" (cancel)="cancel()"
         (print)="doPrint()" (delete)="doDelete()" (addRow)="doAddRow()"></app-preventivo-actions>
