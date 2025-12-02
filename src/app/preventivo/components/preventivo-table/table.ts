@@ -20,5 +20,5 @@ export class PreventivoTable {
     }
 
     changeSort(col: string) { this.svc.changeSort(col); }
-    open(p: any) { this.rowClick.emit(p); this.service.openDetails(p); }
+    open(p: any) { this.rowClick.emit(p); }
 }
