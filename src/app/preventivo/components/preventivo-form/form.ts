@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PreventivoFormAdapter } from './PreventivoFormAdapter';
@@ -15,6 +15,7 @@ export class PreventivoForm implements OnChanges {
     @Input() preventivo: any | null = null;
     @Input() formPreventivo!: FormGroup; // <- passiamo il form dal padre
     @Input() isEditing = false;
+    @Output() deleteRow = new EventEmitter<number>();
     constructor(public frmAdapter: PreventivoFormAdapter) { }
 
 

@@ -4,6 +4,7 @@ import { PreventivoForm } from '../preventivo-form/form';
 import { PreventivoActions } from '../preventivo-actions/actions';
 import { PreventiviService } from '../../services/preventivi.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { PreventivoFormAdapter } from '../preventivo-form/PreventivoFormAdapter';
 
 
 @Component({
@@ -18,16 +19,13 @@ export class PreventivoDetail {
     @Input() formPreventivo!: FormGroup; // <- passiamo il form dal padre
     @Output() back = new EventEmitter<void>();
 
-
-    constructor(public svc: PreventiviService) {
-
-    }
-
+    constructor(public svc: PreventiviService, public formAdapter: PreventivoFormAdapter) { }
 
     startEdit() { this.svc.editPreventivo(); }
     save() { this.svc.savePreventivo(); this.back.emit(); }
     cancel() { this.svc.cancelEdit(); this.back.emit(); }
     doPrint() { if (this.preventivo) this.svc.printPreventivo(this.preventivo); }
     doDelete() { if (this.preventivo) this.svc.deletePreventivo(this.preventivo); this.back.emit(); }
-    doAddRow() { console.log('Aggiungo riga'); }
+    doAddRow() { if (this.preventivo) { this.formAdapter.addRiga(this.svc.formPreventivo); } }
+    doDeleteRow(index: number) { if (this.preventivo) { this.formAdapter.removeRiga(this.svc.formPreventivo, index); } }
 }

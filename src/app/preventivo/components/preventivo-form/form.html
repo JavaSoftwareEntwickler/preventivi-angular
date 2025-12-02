@@ -45,7 +45,8 @@
                 <td><input [id]="'importo-tot_' + i" name="importo-tot" type="number" formControlName="importoTotale" />
                 </td>
                 @if (isEditing) {
-                <td class="actions"><button class="icon-btn delete"><i class="fal fa-trash"></i></button></td>
+                <td class="actions"><button class="icon-btn delete" (click)="deleteRow.emit(i)"><i
+                            class="fal fa-trash"></i></button></td>
                 }
 
             </tr>
