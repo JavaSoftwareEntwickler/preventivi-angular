@@ -16,6 +16,13 @@
     border: 1px solid #ccc
 }
 
+.table-righe-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* scroll fluido mobile */
+}
+
 .righe-table {
     width: 100%;
     border-collapse: collapse;
@@ -75,4 +82,62 @@
 
 .icon-btn.delete i {
     color: #d62828
+}
+
+/* pagination per righe preventivo */
+.pagination {
+    padding: 0.8rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center
+}
+
+.pagination button {
+    padding: 0.5rem 0.9rem;
+    border-radius: 0.4rem;
+    border: 1px solid #012a5b;
+    background: white
+}
+
+/* --- CARD VIEW (mobile) --- */
+
+.righe-card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.riga-card {
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.card-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.card-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #012a5b;
+    margin-bottom: 0.3rem;
+}
+
+.card-field input {
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.riga-card .icon-btn.delete {
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: center;
 }

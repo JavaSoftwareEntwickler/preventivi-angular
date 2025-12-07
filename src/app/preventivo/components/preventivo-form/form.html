@@ -21,21 +21,22 @@
         <input id="importoTotale" type="number" formControlName="importoTotale" name="importoTotale" />
     </div>
 
-    <table class="righe-table">
-        <thead>
-            <tr>
-                <th>Descrizione</th>
-                <th>UM</th>
-                <th>Quantità</th>
-                <th>Importo</th>
-                <th>Importo totale</th>
-                @if (isEditing) {
-                <th>Azione</th>
-                }
-
-            </tr>
-        </thead>
-        <tbody formArrayName="righe">
+    @if (!isMobile()) {
+    <div class="table-righe-responsive">
+        <table class="righe-table">
+            <thead>
+                <tr>
+                    <th>Descrizione</th>
+                    <th>UM</th>
+                    <th>Quantità</th>
+                    <th>Importo</th>
+                    <th>Importo totale</th>
+                    @if (isEditing) {
+                    <th>Azione</th>
+                    }
+                </tr>
+            </thead>
+            <!-- <tbody formArrayName="righe">
             <tr *ngFor="let riga of frmAdapter.getRighe(formPreventivo).controls; let i = index" [formGroupName]="i">
                 <td><input [id]="'descrizione_' + i" name="descrizione" type="text" formControlName="descrizione" />
                 </td>
@@ -44,12 +45,90 @@
                 <td><input [id]="'importo_' + i" name="importo" type="number" formControlName="importo" /></td>
                 <td><input [id]="'importo-tot_' + i" name="importo-tot" type="number" formControlName="importoTotale" />
                 </td>
-                @if (isEditing) {
-                <td class="actions"><button class="icon-btn delete" (click)="deleteRow.emit(i)"><i
-                            class="fal fa-trash"></i></button></td>
-                }
-
             </tr>
         </tbody>
+
     </table>
+    <div class="pagination">
+        <button (click)="prev()" [disabled]="svc.currentPage() === 1">
+            <i class="fal fa-chevron-left"></i>
+        </button>
+        <span>Pagina {{ svc.currentPage() }} di {{ svc.totalPages() }}</span>
+        <button (click)="next()" [disabled]="svc.currentPage() === svc.totalPages()">
+            <i class="fal fa-chevron-right"></i>
+        </button>
+    </div> -->
+
+            <tbody formArrayName="righe">
+                <tr *ngFor="let riga of visibleRighe();let i = index; trackBy: trackByFn" [formGroupName]="
+                riga.realIndex">
+                    <td><input [id]="'descrizione_' + riga.realIndex" name="descrizione" type="text"
+                            formControlName="descrizione" /></td>
+                    <td><input [id]="'um_' + riga.realIndex" name="um" type="text" formControlName="um" /></td>
+                    <td><input [id]="'quantita_' + riga.realIndex" name="quantita" type="number"
+                            formControlName="quantita" /></td>
+                    <td><input [id]="'importo_' + riga.realIndex" name="importo" type="number"
+                            formControlName="importo" />
+                    </td>
+                    <td><input [id]="'importo-tot_' + riga.realIndex" name="importo-tot" type="number"
+                            formControlName="importoTotale" /></td>
+                    @if (isEditing) {
+                    <td>
+                        <button class="icon-btn delete" (click)="deleteRow.emit(riga.realIndex)">
+                            <i class="fal fa-trash"></i>
+                        </button>
+                    </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    }
+    @if (isMobile()) {
+    <div class="righe-card-container" formArrayName="righe">
+        <div class="riga-card" *ngFor="let riga of visibleRighe(); trackBy: trackByFn" [formGroupName]="riga.realIndex">
+
+            <div class="card-field">
+                <label>Descrizione</label>
+                <input type="text" formControlName="descrizione">
+            </div>
+
+            <div class="card-field">
+                <label>UM</label>
+                <input type="text" formControlName="um">
+            </div>
+
+            <div class="card-field">
+                <label>Quantità</label>
+                <input type="number" formControlName="quantita">
+            </div>
+
+            <div class="card-field">
+                <label>Importo</label>
+                <input type="number" formControlName="importo">
+            </div>
+
+            <div class="card-field">
+                <label>Totale</label>
+                <input type="number" formControlName="importoTotale">
+            </div>
+
+            @if (isEditing) {
+            <button class="icon-btn delete" (click)="deleteRow.emit(riga.realIndex)">
+                <i class="fal fa-trash"></i> Elimina
+            </button>
+            }
+        </div>
+    </div>
+    }
+
+    <div class="pagination">
+        <button (click)="prev()" [disabled]="svc.currentPage() === 1">
+            <i class="fal fa-chevron-left"></i>
+        </button>
+        <span>Pagina {{ svc.currentPage() }} di {{ svc.totalPages() }}</span>
+        <button (click)="next()" [disabled]="svc.currentPage() === svc.totalPages()">
+            <i class="fal fa-chevron-right"></i>
+        </button>
+    </div>
 </div>
