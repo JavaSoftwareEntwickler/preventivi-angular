@@ -2,10 +2,10 @@
     <button class="btn-primary" (click)="back.emit()"><i class="fal fa-arrow-left"></i> Torna alla lista</button>
 
     <div class="action-title">
-        @if (svc.isCreating()) {
+        @if (service.isCreating()) {
         <h2>Aggiungi Preventivo</h2>
         }
-        @else if (svc.isEditing()) {
+        @else if (service.isEditing()) {
         <h2 class="page-title">Modifica Preventivo</h2>
         }
         @else {
@@ -13,9 +13,9 @@
         }
     </div>
 
-    <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="svc.formPreventivo" [isEditing]="svc.isEditing()"
-        (deleteRow)="doDeleteRow($event)"></app-preventivo-form>
+    <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="service.formPreventivo"
+        [isEditing]="service.isEditing()" (deleteRow)="doDeleteRow($event)"></app-preventivo-form>
 
-    <app-preventivo-actions [isEditing]="svc.isEditing()" (edit)="startEdit()" (save)="save()" (cancel)="cancel()"
+    <app-preventivo-actions [isEditing]="service.isEditing()" (edit)="startEdit()" (save)="save()" (cancel)="cancel()"
         (print)="doPrint()" (delete)="doDelete()" (addRow)="doAddRow()"></app-preventivo-actions>
 </div>
