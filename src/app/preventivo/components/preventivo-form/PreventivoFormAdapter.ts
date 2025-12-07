@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PreventivoModel } from '../../models/preventivo-model';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Injectable({ providedIn: 'root' })
 export class PreventivoFormAdapter {
+    private destroy$ = new Subject<void>();  // Subject per gestire la disiscrizione
 
     constructor(private fb: FormBuilder) { }
 
@@ -28,19 +31,11 @@ export class PreventivoFormAdapter {
         });
 
         // Resetta e popola le righe del preventivo
-        form.get('righe').clear();
-        model.righe.forEach(r =>
-            form.get('righe').push(
-                this.fb.group({
-                    id: r.id,
-                    descrizione: [r.descrizione, Validators.required],
-                    um: [r.um, Validators.required],
-                    quantita: [r.quantita, Validators.required],
-                    importo: [r.importo, Validators.required],
-                    importoTotale: [r.importoTotale, Validators.required]
-                })
-            )
-        );
+        const righeFA = form.get('righe') as FormArray;
+        righeFA.clear();
+        model.righe.forEach(r => {
+            righeFA.push(this.createRiga(r));  // <-- AUTO-CALCOLO RESTA ATTIVO
+        });
     }
 
     /** Mapping form → model */
@@ -70,7 +65,7 @@ export class PreventivoFormAdapter {
             id: null,
             nomeCliente: '',
             dataPreventivo: '',
-            importoTotale: 0
+            importoTotale: 1
         });
 
         // Resetta e aggiungi una riga vuota
@@ -98,16 +93,31 @@ export class PreventivoFormAdapter {
      * @param r Riga del preventivo da trasformare in form group
      * @returns FormGroup per la riga
      */
-    createRiga(r?: { id: number, descrizione: string; um: string, quantita: number, importo: number, importoTotale: number }): FormGroup {
-        return this.fb.group({
+    createRiga(r?: {
+        id: number,
+        descrizione: string,
+        um: string,
+        quantita: number,
+        importo: number,
+        importoTotale: number
+    }): FormGroup {
+
+        const fg = this.fb.group({
             id: r?.id,
             descrizione: [r?.descrizione ?? '', Validators.required],
             um: [r?.um ?? '', Validators.required],
             quantita: [r?.quantita ?? 1, Validators.required],
             importo: [r?.importo ?? 1, Validators.required],
-            importoTotale: [r?.importoTotale ?? 1, Validators.required]
+            importoTotale: [{ value: r?.importoTotale ?? 1, disabled: false }]
         });
+
+        // Auto-calcolo:
+        fg.get('quantita')!.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateTotaleRiga(fg));
+        fg.get('importo')!.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateTotaleRiga(fg));
+
+        return fg;
     }
+
 
     addRiga(form: FormGroup,
         r?: {
@@ -118,15 +128,51 @@ export class PreventivoFormAdapter {
             importo: number,
             importoTotale: number,
         }) {
-        this.getRighe(form).push(this.createRiga(r));
+        const righeFA = this.getRighe(form); // Otteniamo il FormArray delle righe
+        const newRiga = this.createRiga(r); // Creiamo una nuova riga
+
+        righeFA.push(newRiga); // Aggiungi la nuova riga al FormArray
+
+        // Forza il calcolo del totale subito dopo l'aggiunta
+        this.updateTotaleRiga(newRiga);
     }
 
     removeRiga(form: FormGroup, index: number) {
-        this.getRighe(form).removeAt(index);
+        this.getRighe(form).removeAt(index);  // Rimuovi la riga dal FormArray
+
+        // Dopo la rimozione, aggiorniamo il totale del preventivo
+        const righeFA = this.getRighe(form); // Otteniamo il FormArray delle righe
+        this.updateTotalePreventivo(righeFA); // Ricalcoliamo il totale
     }
 
     resetRighe(form: FormGroup) {
         this.getRighe(form).clear();
     }
 
+    /** calcolo automatio degli importi totali delle righe */
+    private updateTotaleRiga(fg: FormGroup) {
+        const q = Number(fg.get('quantita')!.value) || 0;
+        const p = Number(fg.get('importo')!.value) || 0;
+        const tot = q * p;
+
+        fg.get('importoTotale')!.setValue(tot, { emitEvent: false });
+
+        // Aggiorna il totale del preventivo
+        if (fg.parent) {
+            this.updateTotalePreventivo(fg.parent as FormArray);
+        }
+    }
+    /** calcolo automatio dell'importo del preventivo */
+    private updateTotalePreventivo(righeFA: FormArray) {
+        const totaleGenerale = righeFA.controls
+            .reduce((acc, ctrl) =>
+                acc + (Number(ctrl.get('importoTotale')!.value) || 0), 0
+            );
+
+        const parent = righeFA.parent as FormGroup;
+
+        parent.get('importoTotale')!.setValue(totaleGenerale, { emitEvent: false });
+    }
+
 }
+
