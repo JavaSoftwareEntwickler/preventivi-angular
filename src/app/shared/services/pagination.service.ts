@@ -47,6 +47,20 @@ export class PaginationService<T> {
         });
     }
 
+    /**
+     * Imposta il segnale esterno dei dati da cui la paginazione deve derivare.
+     * Viene creato un effetto reattivo che aggiorna i dati interni
+     * e resetta la pagina corrente quando i dati cambiano.
+     *
+     * @param dataSignal Signal esterno contenente l'array di dati
+     */
+    setDataStatic(dataSignal: Signal<T[]>) {
+
+        this._data.set(dataSignal());
+        this.currentPage.set(1); // reset page quando i dati cambiano
+
+    }
+
     /** Dati filtrati secondo il termine di ricerca */
     filtered = computed(() => {
         const q = this.searchTerm().toLowerCase();
