@@ -15,7 +15,7 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable({
     providedIn: 'root',
 })
-export class CrudService<T> {
+export class ApiCrudService<T> {
     /**
      * URL base per le API, da configurare tramite il metodo `setApiUrl`.
      * 

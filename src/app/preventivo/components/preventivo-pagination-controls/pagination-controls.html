@@ -1,0 +1,9 @@
+<div class="pagination">
+    <button (click)="prev()" [disabled]="dataPagService.currentPage() === 1">
+        <i class="fal fa-chevron-left"></i>
+    </button>
+    <span>Pagina {{ dataPagService.currentPage() }} di {{ dataPagService.totalPages() }}</span>
+    <button (click)="next()" [disabled]="dataPagService.currentPage() === dataPagService.totalPages()">
+        <i class="fal fa-chevron-right"></i>
+    </button>
+</div>

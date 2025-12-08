@@ -1,0 +1,12 @@
+<div class="table-card">
+    <button class="btn-primary" (click)="back.emit()"><i class="fal fa-arrow-left"></i> Torna alla lista</button>
+
+    <div class="action-title">
+        <h2>{{ titolo }}</h2>
+    </div>
+
+    <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="service.formPreventivo"
+        [isEditing]="service.isEditing()" (deleteRow)="doDeleteRow($event)" (edit)="startEdit()" (cancel)="cancel()"
+        (print)="doPrint()" (delete)="doDelete()" (addRow)="doAddRow()" (onSubmit)="saveData()"></app-preventivo-form>
+
+</div>

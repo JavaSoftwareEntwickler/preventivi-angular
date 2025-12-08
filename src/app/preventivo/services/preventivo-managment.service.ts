@@ -2,8 +2,8 @@ import { Injectable, signal, } from '@angular/core';
 import { FormGroup, } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { PreventivoModel } from '../models/preventivo-model';
-import { CrudService } from '../../shared/services/crud.service';
-import { PreventivoFormAdapter } from '../components/preventivo-form/PreventivoFormAdapter';
+import { ApiCrudService } from '../../shared/services/api-crud.service';
+import { PreventivoFormService } from './form.service';
 
 /**
  * Servizio di gestione dei preventivi.
@@ -20,7 +20,7 @@ import { PreventivoFormAdapter } from '../components/preventivo-form/PreventivoF
  * @see PreventivoModel Modello dei dati di un preventivo
  */
 @Injectable({ providedIn: 'root' })
-export class PreventiviService {
+export class PreventivoManagementService {
 
     /** Segnale per gestire la modalità di visualizzazione corrente (list o detail) */
     pageMode = signal<'list' | 'detail'>('list');
@@ -45,7 +45,7 @@ export class PreventiviService {
      *  per eseguire il recupero di tutti i preventivi.
      * -il form adapter 
     */
-    constructor(private crudService: CrudService<PreventivoModel>, private formAdapter: PreventivoFormAdapter) {
+    constructor(private crudService: ApiCrudService<PreventivoModel>, private formAdapter: PreventivoFormService) {
         this.formPreventivo = this.formAdapter.buildForm();
         this.crudService.setApiUrl(`${this.url}/preventivi`);
         this.getPreventivi()

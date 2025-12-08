@@ -1,0 +1,1 @@
+describe('PreventivoDetail (placeholder)', () => { it('ok', () => expect(true).toBeTrue()); });

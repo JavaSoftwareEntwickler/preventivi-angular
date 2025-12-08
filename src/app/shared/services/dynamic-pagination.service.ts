@@ -12,7 +12,7 @@ import { computed, effect, Injectable, Signal, signal } from '@angular/core';
  * @template T Tipo generico del modello dei dati
  */
 @Injectable({ providedIn: 'root' })
-export class PaginationService<T> {
+export class DynamicPaginationService<T> {
     /** Term di ricerca reattivo */
     searchTerm = signal<string>('');
 
@@ -62,7 +62,6 @@ export class PaginationService<T> {
     }
 
     updateDataWithoutResetPage(dataSignal: Signal<T[]>) {
-        const current = this.currentPage();     // salva pagina corrente
         this._data.set(dataSignal());           // aggiorna dati
         this.currentPage.set(this.totalPages()); // ripristina pagina all'ultima utile
     }

@@ -1,4 +1,4 @@
-<div class="table-card" [formGroup]="formPreventivo">
+<form class="table-card" [formGroup]="formPreventivo" (ngSubmit)="onSubmit.emit()">
     <!--     
     <div class="detail-row">
         <label for="id">ID</label>
@@ -50,11 +50,11 @@
 
     </table>
     <div class="pagination">
-        <button (click)="prev()" [disabled]="svc.currentPage() === 1">
+        <button (click)="prev()" [disabled]="dataPagService.currentPage() === 1">
             <i class="fal fa-chevron-left"></i>
         </button>
-        <span>Pagina {{ svc.currentPage() }} di {{ svc.totalPages() }}</span>
-        <button (click)="next()" [disabled]="svc.currentPage() === svc.totalPages()">
+        <span>Pagina {{ dataPagService.currentPage() }} di {{ dataPagService.totalPages() }}</span>
+        <button (click)="next()" [disabled]="dataPagService.currentPage() === dataPagService.totalPages()">
             <i class="fal fa-chevron-right"></i>
         </button>
     </div> -->
@@ -123,12 +123,43 @@
     }
 
     <div class="pagination">
-        <button (click)="prev()" [disabled]="svc.currentPage() === 1">
+        <button (click)="prev()" [disabled]="dataPagService.currentPage() === 1">
             <i class="fal fa-chevron-left"></i>
         </button>
-        <span>Pagina {{ svc.currentPage() }} di {{ svc.totalPages() }}</span>
-        <button (click)="next()" [disabled]="svc.currentPage() === svc.totalPages()">
+        <span>Pagina {{ dataPagService.currentPage() }} di {{ dataPagService.totalPages() }}</span>
+        <button (click)="next()" [disabled]="dataPagService.currentPage() === dataPagService.totalPages()">
             <i class="fal fa-chevron-right"></i>
         </button>
     </div>
-</div>
+    <div class="modal-actions">
+
+        @if (!isEditing) {
+        <button type="button" class="icon-btn print" (click)="print.emit()">
+            <i class="fal fa-print"></i>
+        </button>
+
+        <button type="button" class="icon-btn edit" (click)="edit.emit()">
+            <i class="fal fa-pencil"></i>
+        </button>
+
+        <button type="button" class="icon-btn delete" (click)="delete.emit()">
+            <i class="fal fa-trash"></i>
+        </button>
+        }
+        @if (isEditing) {
+        <button type="button" class="icon-btn edit">
+            <i class="fal fa-plus" (click)="addRow.emit()"></i>
+        </button>
+
+        <button type="submit" class="icon-btn edit">
+            <i class="fal fa-save"></i>
+        </button>
+
+        <button type="button" class="icon-btn close" (click)="cancel.emit()">
+            <i class="fal fa-times"></i>
+        </button>
+
+        }
+
+    </div>
+</form>

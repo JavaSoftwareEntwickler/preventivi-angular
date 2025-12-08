@@ -1,31 +1,37 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output, signal, SimpleChanges } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { PreventivoFormAdapter } from './PreventivoFormAdapter';
-import { PaginationService } from '../../../shared/services/pagination.service';
+import { PreventivoFormService } from '../../services/form.service';
+import { DynamicPaginationService } from '../../../shared/services/dynamic-pagination.service';
 import { RighePreventivoModel } from '../../models/righe-preventivo-model';
-import { PreventiviService } from '../../services/preventivi.service';
-import { ActivatedRoute } from '@angular/router';
+import { PreventivoManagementService } from '../../services/preventivo-managment.service';
 
 
 @Component({
     selector: 'app-preventivo-form',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
-    templateUrl: './form.html',
-    styleUrls: ['./form.css']
+    templateUrl: './form-edit.html',
+    styleUrls: ['./form-edit.css']
 })
-export class PreventivoForm implements OnChanges {
+export class PreventivoFormEditComponent implements OnChanges {
+
     @Input() preventivo: any | null = null;
-    @Input() formPreventivo!: FormGroup; // <- passiamo il form dal padre
+    @Input() formPreventivo!: FormGroup;
     @Input() isEditing = false;
     @Output() deleteRow = new EventEmitter<number>();
+    @Output() edit = new EventEmitter<void>();
+    @Output() onSubmit = new EventEmitter<void>();
+    @Output() cancel = new EventEmitter<void>();
+    @Output() print = new EventEmitter<void>();
+    @Output() delete = new EventEmitter<void>();
+    @Output() addRow = new EventEmitter<void>();
     isMobile = signal(window.innerWidth < 1058);
 
     constructor(
-        public frmAdapter: PreventivoFormAdapter,
-        public svc: PaginationService<RighePreventivoModel>,
-        public service: PreventiviService) {
+        public frmAdapter: PreventivoFormService,
+        public dataPagService: DynamicPaginationService<RighePreventivoModel>,
+        public service: PreventivoManagementService) {
 
         // Settiamo i dati per il PaginationService
         // Estrai le righe come oggetti (non form controls) di tipo RighePreventivoModel
@@ -38,7 +44,7 @@ export class PreventivoForm implements OnChanges {
         const righeSignal = signal<RighePreventivoModel[]>(righe);
 
         // Setta il Signal al PaginationService
-        this.svc.setData(righeSignal);
+        this.dataPagService.setData(righeSignal);
     }
 
     ngOnInit() {
@@ -61,9 +67,9 @@ export class PreventivoForm implements OnChanges {
 
     visibleRighe() {
         //console.log("sono in visibleRighe")
-        const start = (this.svc.currentPage() - 1) * this.svc.pageSize;
+        const start = (this.dataPagService.currentPage() - 1) * this.dataPagService.pageSize;
         const allRighe = this.frmAdapter.getRighe(this.formPreventivo).controls;
-        return allRighe.slice(start, start + this.svc.pageSize)
+        return allRighe.slice(start, start + this.dataPagService.pageSize)
             .map((ctrl, idx) => ({
                 ctrl,
                 realIndex: start + idx
@@ -74,7 +80,7 @@ export class PreventivoForm implements OnChanges {
         return item.realIndex;  // Usa un identificativo unico, in questo caso `realIndex`
     }
 
+    prev() { this.dataPagService.goToPage(this.dataPagService.currentPage() - 1); }
+    next() { this.dataPagService.goToPage(this.dataPagService.currentPage() + 1); }
 
-    prev() { this.svc.goToPage(this.svc.currentPage() - 1); }
-    next() { this.svc.goToPage(this.svc.currentPage() + 1); }
 }

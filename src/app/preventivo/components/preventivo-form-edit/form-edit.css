@@ -141,3 +141,40 @@
     width: 100%;
     justify-content: center;
 }
+
+/* Actions*/
+.modal-actions {
+    padding: 0.8rem;
+    display: flex;
+    gap: 0.8rem;
+}
+
+.icon-btn {
+    background: #f5f5f5;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 1.1rem;
+}
+
+.icon-btn:hover {
+    background: #e0e0e0
+}
+
+.icon-btn.print i {
+    color: #077711
+}
+
+.icon-btn.edit i {
+    color: #0c66d8
+}
+
+.icon-btn.delete i {
+    color: #d62828
+}
+
+.icon-btn.close i {
+    color: #333
+}

@@ -1,24 +1,23 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PreventiviService } from '../../services/preventivi.service';
-import { PaginationService } from '../../../shared/services/pagination.service';
+import { PreventivoManagementService } from '../../services/preventivo-managment.service';
+import { DynamicPaginationService } from '../../../shared/services/dynamic-pagination.service';
 import { PreventivoModel } from '../../models/preventivo-model';
 
 
 
 @Component({
-    selector: 'app-preventivo-table',
+    selector: 'app-preventivo-table-view',
     standalone: true,
     imports: [CommonModule],
     templateUrl: './table.html',
     styleUrls: ['./table.css']
 })
-export class PreventivoTable {
+export class PreventivoTableViewComponent {
     @Output() rowClick = new EventEmitter<any>();
-    constructor(public service: PreventiviService, public svc: PaginationService<PreventivoModel>) {
+    constructor(public service: PreventivoManagementService, public svc: DynamicPaginationService<PreventivoModel>) {
         this.svc.setData(this.service.preventivi);
     }
-
     changeSort(col: string) { this.svc.changeSort(col); }
     open(p: any) { this.rowClick.emit(p); }
 }

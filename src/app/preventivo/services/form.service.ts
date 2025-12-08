@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PreventivoModel } from '../../models/preventivo-model';
+import { PreventivoModel } from '../models/preventivo-model';
 import { Subject } from 'rxjs/internal/Subject';
+import { positiveNumberValidator } from '../../shared/helper/validators-helper';
 
 @Injectable({ providedIn: 'root' })
-export class PreventivoFormAdapter {
+export class PreventivoFormService {
     private destroy$ = new Subject<void>();  // Subject per gestire la disiscrizione
 
     constructor(private fb: FormBuilder) { }
@@ -15,8 +16,8 @@ export class PreventivoFormAdapter {
         return this.fb.group({
             id: [{ value: 0, disabled: true }],
             nomeCliente: ['', Validators.required],
-            dataPreventivo: ['', Validators.required],
-            importoTotale: [0, [Validators.required, Validators.min(0)]],
+            dataPreventivo: ['', [Validators.required]],
+            importoTotale: [0, [Validators.required, positiveNumberValidator()]],
             righe: this.fb.array([]),
         });
     }
@@ -106,9 +107,9 @@ export class PreventivoFormAdapter {
             id: r?.id,
             descrizione: [r?.descrizione ?? '', Validators.required],
             um: [r?.um ?? '', Validators.required],
-            quantita: [r?.quantita ?? 1, Validators.required],
-            importo: [r?.importo ?? 1, Validators.required],
-            importoTotale: [{ value: r?.importoTotale ?? 1, disabled: false }]
+            quantita: [r?.quantita ?? 1, [Validators.required, positiveNumberValidator()]],
+            importo: [r?.importo ?? 1, [Validators.required, positiveNumberValidator()]],
+            importoTotale: [{ value: r?.importoTotale ?? 1, disabled: false }, [Validators.required, positiveNumberValidator()]]
         });
 
         // Auto-calcolo:

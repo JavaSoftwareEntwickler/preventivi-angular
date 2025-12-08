@@ -1,9 +1,0 @@
-<div class="pagination">
-    <button (click)="prev()" [disabled]="svc.currentPage() === 1">
-        <i class="fal fa-chevron-left"></i>
-    </button>
-    <span>Pagina {{ svc.currentPage() }} di {{ svc.totalPages() }}</span>
-    <button (click)="next()" [disabled]="svc.currentPage() === svc.totalPages()">
-        <i class="fal fa-chevron-right"></i>
-    </button>
-</div>
