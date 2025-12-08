@@ -43,7 +43,7 @@ export class PaginationService<T> {
     setData(dataSignal: Signal<T[]>) {
         effect(() => {
             this._data.set(dataSignal());
-            this.currentPage.set(1); // reset page quando i dati cambiano
+            this.currentPage.set(this.totalPages()); // reset page quando i dati cambiano
         });
     }
 
@@ -59,6 +59,12 @@ export class PaginationService<T> {
         this._data.set(dataSignal());
         this.currentPage.set(1); // reset page quando i dati cambiano
 
+    }
+
+    updateDataWithoutResetPage(dataSignal: Signal<T[]>) {
+        const current = this.currentPage();     // salva pagina corrente
+        this._data.set(dataSignal());           // aggiorna dati
+        this.currentPage.set(this.totalPages()); // ripristina pagina all'ultima utile
     }
 
     /** Dati filtrati secondo il termine di ricerca */

@@ -75,7 +75,9 @@ export class PreventivoDetail {
         this.righeSignal.set(updatedRighe);
 
         // Imposta i nuovi dati nel servizio di paginazione
-        this.svc.setDataStatic(this.righeSignal);
+        //this.svc.setDataStatic(this.righeSignal);
+        console.log(this.svc.currentPage())
+        this.svc.updateDataWithoutResetPage(this.righeSignal);
 
         // Verifica che la paginazione venga aggiornata correttamente
         console.log("Numero righe paginazione:", this.svc.filtered());
