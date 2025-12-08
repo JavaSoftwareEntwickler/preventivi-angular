@@ -42,14 +42,14 @@ export class PreventivoForm implements OnChanges {
     }
 
     ngOnInit() {
-        console.log('ngOnInit  Componente Form Standalone inizializzato');
+        // console.log('ngOnInit  Componente Form Standalone inizializzato');
         window.addEventListener('resize', () => {
             this.isMobile.set(window.innerWidth < 1058);
         });
     }
     // Ciclo di vita - ngOnDestroy
     ngOnDestroy(): void {
-        console.log('Componente Form Standalone distrutto');
+        // console.log('Componente Form Standalone distrutto');
     }
 
     ngOnChanges(ch: SimpleChanges) {
@@ -60,7 +60,7 @@ export class PreventivoForm implements OnChanges {
     }
 
     visibleRighe() {
-        console.log("sono in visibleRighe")
+        //console.log("sono in visibleRighe")
         const start = (this.svc.currentPage() - 1) * this.svc.pageSize;
         const allRighe = this.frmAdapter.getRighe(this.formPreventivo).controls;
         return allRighe.slice(start, start + this.svc.pageSize)
@@ -70,7 +70,7 @@ export class PreventivoForm implements OnChanges {
             }));
     }
     trackByFn(index: number, item: any): number {
-        console.log("sono in trackByFn")
+        //console.log("sono in trackByFn")
         return item.realIndex;  // Usa un identificativo unico, in questo caso `realIndex`
     }
 
