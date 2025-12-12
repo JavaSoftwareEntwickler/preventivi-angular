@@ -45,9 +45,9 @@ export class PreventivoManagementService {
      *  per eseguire il recupero di tutti i preventivi.
      * -il form adapter 
     */
-    constructor(private crudService: ApiCrudService<PreventivoModel>, private formAdapter: PreventivoFormService) {
+    constructor(private apiCrudService: ApiCrudService<PreventivoModel>, private formAdapter: PreventivoFormService) {
         this.formPreventivo = this.formAdapter.buildForm();
-        this.crudService.setApiUrl(`${this.url}/preventivi`);
+        this.apiCrudService.setApiUrl(`${this.url}/preventivi`);
         this.getPreventivi()
             .subscribe(data => {
                 // Inizializza i preventivi
@@ -74,7 +74,7 @@ export class PreventivoManagementService {
      * @returns Observable contenente un array di PreventivoModel
      */
     public getPreventivi(): Observable<PreventivoModel[]> {
-        return this.crudService.getAll();
+        return this.apiCrudService.getAll();
     }
 
     /** Getter pubblico per accedere ai preventivi */
@@ -182,7 +182,7 @@ export class PreventivoManagementService {
     }
 
     private creaPreventivo(formValuePerSignal: PreventivoModel) {
-        this.crudService.create(formValuePerSignal).subscribe({
+        this.apiCrudService.create(formValuePerSignal).subscribe({
             next: (preventivoCreato) => {
                 formValuePerSignal.id = preventivoCreato.id;
                 // Aggiungi il preventivo alla lista locale signal
@@ -198,11 +198,16 @@ export class PreventivoManagementService {
 
     private aggiornaPreventivo(formValuePerSignal: PreventivoModel) {
         const updated = { ...this.selectedPreventivo()!, ...formValuePerSignal };
-        this.crudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({
+        this.apiCrudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({
             next: (preventivoAggiornato) => {
-
+                console.log("ricevo dal db:", preventivoAggiornato.righe)
                 // Aggiorna il preventivo alla lista locale signal
-                this._preventivi.set(this._preventivi().map(p => p.id === updated.id ? updated : p));
+                // Sostituisci il vecchio preventivo con quello aggiornato che contiene le righe con gli ID restituiti dal ApiSerivice
+                this._preventivi.set(this._preventivi().map(p =>
+                    p.id === preventivoAggiornato.id
+                        ? { ...p, ...preventivoAggiornato, righe: preventivoAggiornato.righe }
+                        : p
+                ));
                 // Imposta lo stato dei segnali
                 this.isEditing.set(false);
                 this.formPreventivo.disable();
@@ -219,7 +224,7 @@ export class PreventivoManagementService {
         const ok = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
         if (ok) {
             this._preventivi.set(this._preventivi().filter(x => x.id !== p.id));
-            this.crudService.delete(p.id).subscribe({});
+            this.apiCrudService.delete(p.id).subscribe({});
             this.backToList();
         }
     }
