@@ -43,7 +43,7 @@ export class DynamicPaginationService<T> {
     setData(dataSignal: Signal<T[]>) {
         effect(() => {
             this._data.set(dataSignal());
-            this.currentPage.set(this.totalPages()); // reset page quando i dati cambiano
+            this.currentPage.set(1); // reset page quando i dati cambiano
         });
     }
 
@@ -63,7 +63,6 @@ export class DynamicPaginationService<T> {
 
     updateDataWithoutResetPage(dataSignal: Signal<T[]>) {
         this._data.set(dataSignal());           // aggiorna dati
-        this.currentPage.set(this.totalPages()); // ripristina pagina all'ultima utile
     }
 
     /** Dati filtrati secondo il termine di ricerca */
@@ -135,6 +134,24 @@ export class DynamicPaginationService<T> {
      * @param page Numero di pagina (1-based)
      */
     goToPage(page: number) {
-        if (page > 0 && page <= this.totalPages()) this.currentPage.set(page);
+
+        if (page > 0 && page <= this.totalPages()) {
+            this.currentPage.set(page);
+            console.log("current page appena settato", this.currentPage());
+        }
+
+    }
+
+    goToCorrectPage(totalRowsForm: number) {
+        // Calcola la pagina corretta per la nuova riga
+        const totalPages = Math.ceil(totalRowsForm / this.pageSize);
+
+        // Se la pagina corrente è maggiore del totale delle pagine, ripristina alla pagina 1
+        if (this.currentPage() > totalPages) {
+            this.goToPage(1);
+        } else {
+            const targetPage = Math.ceil(totalRowsForm / this.pageSize);
+            this.goToPage(targetPage);  // Sposta alla pagina corretta
+        }
     }
 }

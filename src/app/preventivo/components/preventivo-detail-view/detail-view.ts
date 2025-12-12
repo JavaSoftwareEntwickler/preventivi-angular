@@ -27,10 +27,7 @@ export class PreventivoDetailViewComponent {
         public dataPagService: DynamicPaginationService<RighePreventivoModel>,
         public service: PreventivoManagementService) {
     }
-    // Metodo di inizializzazione
-    // Ciclo di vita - ngOnInit
     ngOnInit(): void {
-        // Imposta il titolo in base alla modalità
         if (this.service.isCreating()) {
             this.titolo = 'Aggiungi Preventivo';
         } else if (this.service.isEditing()) {
@@ -39,15 +36,7 @@ export class PreventivoDetailViewComponent {
             this.titolo = 'Dettaglio Preventivo';
         }
         if (this.preventivo) {
-            // console.log("ngOnInit dentro if preventivo Componente Standalone inizializzato");
-            // console.log("PreventivoDetail inizializzato, righe iniziali: ", this.formHelper.getRighe(this.service.formPreventivo).controls.length);
-
-            const righe = this.formHelper.getRighe(this.service.formPreventivo)
-                .controls.map((rigaFormGroup) => {
-                    return rigaFormGroup.getRawValue() as RighePreventivoModel;
-                });
-            this.righeSignal.set(righe);  // Setta i dati nel servizio di paginazione
-            this.dataPagService.setDataStatic(this.righeSignal);  // Aggiorna i dati nel servizio di paginazione
+            this.refreshPagination();
         }
     }
     /** Metodo per il submit del form */
@@ -55,22 +44,9 @@ export class PreventivoDetailViewComponent {
         this.service.savePreventivo();
         this.back.emit();
     }
-    // Ciclo di vita - ngOnDestroy
-    ngOnDestroy(): void {
-        // console.log('Componente Standalone distrutto');
-    }
-    /** Controlla che tutte le righe siano valide */
-    areRigheValid(): boolean {
-        const righeFA = this.service.formPreventivo.get('righe') as FormArray;
-        //console.log("formPreventivo.valid", this.service.formPreventivo.valid)
-        //console.log("righeFA.controls", righeFA.controls)
-        return righeFA.controls.every(control => control.valid);
-    }
-
     startEdit() {
         this.service.editPreventivo();
     }
-
     cancel() {
         this.service.cancelEdit();
         this.back.emit();
@@ -85,40 +61,23 @@ export class PreventivoDetailViewComponent {
             this.back.emit();
         }
     }
-    /*     doAddRow() {
-            if (this.preventivo) {
-                this.formHelper.addRiga(this.service.formPreventivo);
-                //console.log(this.formHelper);
-     
-            }
-        } */
     doAddRow() {
-
-        // Aggiungi una nuova riga al form
         this.formHelper.addRiga(this.service.formPreventivo);
-        //console.log("Numero di righe dopo aggiunta: ", this.formHelper.getRighe(this.service.formPreventivo).controls.length);
-        //console.log("righe dopo aggiunta: ", this.formHelper.getRighe(this.service.formPreventivo).controls);
-
-        // Estrai le righe aggiornate come oggetti
-        const updatedRighe = this.formHelper.getRighe(this.service.formPreventivo)
-            .controls.map((rigaFormGroup) => rigaFormGroup.getRawValue() as RighePreventivoModel);
-
-        // Aggiorna il Signal nel servizio di paginazione con le nuove righe
-        this.righeSignal.set(updatedRighe);
-
-        // Imposta i nuovi dati nel servizio di paginazione
-        //this.dataPagService.setDataStatic(this.righeSignal);
-        //console.log(this.dataPagService.currentPage())
-        this.dataPagService.updateDataWithoutResetPage(this.righeSignal);
-
-        // Verifica che la paginazione venga aggiornata correttamente
-        //console.log("Numero righe paginazione:", this.dataPagService.filtered());
-
+        this.refreshPagination();
+        const totalRows = this.formHelper.getRighe(this.service.formPreventivo).length;
+        this.dataPagService.goToCorrectPage(totalRows);
     }
     doDeleteRow(index: number) {
         if (this.preventivo) {
             this.formHelper.removeRiga(this.service.formPreventivo, index);
+            this.refreshPagination()
         }
     }
-
+    // Aggiorna le righe nel paginatore
+    private refreshPagination() {
+        const updatedRighe = this.formHelper.getRighe(this.service.formPreventivo)
+            .controls.map((rigaFormGroup) => rigaFormGroup.getRawValue() as RighePreventivoModel);
+        this.righeSignal.set(updatedRighe);
+        this.dataPagService.updateDataWithoutResetPage(this.righeSignal);
+    }
 }

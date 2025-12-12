@@ -80,7 +80,13 @@ export class PreventivoFormEditComponent implements OnChanges {
         return item.realIndex;  // Usa un identificativo unico, in questo caso `realIndex`
     }
 
-    prev() { this.dataPagService.goToPage(this.dataPagService.currentPage() - 1); }
-    next() { this.dataPagService.goToPage(this.dataPagService.currentPage() + 1); }
+    prev() {
+        this.dataPagService.goToPage(this.dataPagService.currentPage() - 1);
+
+    }
+    next() {
+        this.dataPagService.goToPage(this.dataPagService.currentPage() + 1);
+
+    }
 
 }
