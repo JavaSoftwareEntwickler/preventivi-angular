@@ -70,7 +70,7 @@ export class PreventivoDetailViewComponent {
     doDeleteRow(index: number) {
         if (this.preventivo) {
             this.formHelper.removeRiga(this.service.formPreventivo, index);
-            this.refreshPagination()
+            this.refreshPagination();
         }
     }
     // Aggiorna le righe nel paginatore

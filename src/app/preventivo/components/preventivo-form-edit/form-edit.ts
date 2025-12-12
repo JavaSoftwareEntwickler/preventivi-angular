@@ -32,52 +32,44 @@ export class PreventivoFormEditComponent implements OnChanges {
         public frmAdapter: PreventivoFormService,
         public dataPagService: DynamicPaginationService<RighePreventivoModel>,
         public service: PreventivoManagementService) {
-
-        // Settiamo i dati per il PaginationService
-        // Estrai le righe come oggetti (non form controls) di tipo RighePreventivoModel
-        const righe = this.frmAdapter.getRighe(this.service.formPreventivo)
-            .controls.map((rigaFormGroup) => {
-                return rigaFormGroup.getRawValue() as RighePreventivoModel;
-            });
-
-        // Crea un Signal correttamente tipizzato
-        const righeSignal = signal<RighePreventivoModel[]>(righe);
-
-        // Setta il Signal al PaginationService
-        this.dataPagService.setData(righeSignal);
     }
 
     ngOnInit() {
-        // console.log('ngOnInit  Componente Form Standalone inizializzato');
         window.addEventListener('resize', () => {
             this.isMobile.set(window.innerWidth < 1058);
         });
-    }
-    // Ciclo di vita - ngOnDestroy
-    ngOnDestroy(): void {
-        // console.log('Componente Form Standalone distrutto');
     }
 
     ngOnChanges(ch: SimpleChanges) {
         if (ch['preventivo'] && this.preventivo) {
             this.frmAdapter.patch(this.preventivo, this.formPreventivo);
             this.formPreventivo.disable();
+
         }
+    }
+    // Aggiorna le righe nel paginatore
+    private refreshPagination() {
+        const updatedRighe = this.frmAdapter.getRighe(this.service.formPreventivo)
+            .controls.map((rigaFormGroup) => rigaFormGroup.getRawValue() as RighePreventivoModel);
+        const righeSignal = signal<RighePreventivoModel[]>(updatedRighe);
+        this.dataPagService.updateDataWithoutResetPage(righeSignal);
     }
 
     visibleRighe() {
-        //console.log("sono in visibleRighe")
         const start = (this.dataPagService.currentPage() - 1) * this.dataPagService.pageSize;
-        const allRighe = this.frmAdapter.getRighe(this.formPreventivo).controls;
-        return allRighe.slice(start, start + this.dataPagService.pageSize)
-            .map((ctrl, idx) => ({
+        const allRigheForm = this.frmAdapter.getRighe(this.service.formPreventivo).controls;
+        const visibleRighe = allRigheForm.filter((ctrl, idx) => idx >= start && idx < start + this.dataPagService.pageSize);
+        return visibleRighe.map((ctrl, idx) => {
+            const realIndex = allRigheForm.findIndex(item => item === ctrl);
+            const rowDataId = ctrl.getRawValue().id;
+            return {
                 ctrl,
-                realIndex: start + idx
-            }));
+                realIndex
+            };
+        });
     }
     trackByFn(index: number, item: any): number {
-        //console.log("sono in trackByFn")
-        return item.realIndex;  // Usa un identificativo unico, in questo caso `realIndex`
+        return item.realIndex;  // Usa l'indice reale
     }
 
     prev() {

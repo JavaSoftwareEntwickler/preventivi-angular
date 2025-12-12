@@ -55,10 +55,8 @@ export class DynamicPaginationService<T> {
      * @param dataSignal Signal esterno contenente l'array di dati
      */
     setDataStatic(dataSignal: Signal<T[]>) {
-
         this._data.set(dataSignal());
         this.currentPage.set(1); // reset page quando i dati cambiano
-
     }
 
     updateDataWithoutResetPage(dataSignal: Signal<T[]>) {
@@ -134,18 +132,14 @@ export class DynamicPaginationService<T> {
      * @param page Numero di pagina (1-based)
      */
     goToPage(page: number) {
-
         if (page > 0 && page <= this.totalPages()) {
             this.currentPage.set(page);
-            console.log("current page appena settato", this.currentPage());
         }
-
     }
 
     goToCorrectPage(totalRowsForm: number) {
         // Calcola la pagina corretta per la nuova riga
         const totalPages = Math.ceil(totalRowsForm / this.pageSize);
-
         // Se la pagina corrente è maggiore del totale delle pagine, ripristina alla pagina 1
         if (this.currentPage() > totalPages) {
             this.goToPage(1);
