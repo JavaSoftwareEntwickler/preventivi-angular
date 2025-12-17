@@ -19,13 +19,13 @@ export class PreventivoDetailViewComponent {
     @Input() preventivo: any | null = null;
     @Input() formPreventivo!: FormGroup; // <- passiamo il form dal padre
     @Output() back = new EventEmitter<void>();
-    righeSignal = signal<RighePreventivoModel[]>([]);
     titolo: string = '';
 
     constructor(
-        public formHelper: PreventivoFormService,
+        public formService: PreventivoFormService,
         public dataPagService: DynamicPaginationService<RighePreventivoModel>,
         public service: PreventivoManagementService) {
+        this.dataPagService.setData(this.service.righePreventivoSignal);
     }
     ngOnInit(): void {
         if (this.service.isCreating()) {
@@ -34,9 +34,6 @@ export class PreventivoDetailViewComponent {
             this.titolo = 'Modifica Preventivo';
         } else {
             this.titolo = 'Dettaglio Preventivo';
-        }
-        if (this.preventivo) {
-            this.refreshPagination();
         }
     }
     /** Metodo per il submit del form */
@@ -61,23 +58,26 @@ export class PreventivoDetailViewComponent {
             this.back.emit();
         }
     }
-    doAddRow() {
-        this.formHelper.addRiga(this.service.formPreventivo);
-        this.refreshPagination();
-        const totalRows = this.formHelper.getRighe(this.service.formPreventivo).length;
+    doAddRow_old() {
+        this.formService.addRiga(this.service.formPreventivo);
+        const totalRows = this.formService.getRighe(this.service.formPreventivo).length;
         this.dataPagService.goToCorrectPage(totalRows);
     }
-    doDeleteRow(index: number) {
-        if (this.preventivo) {
-            this.formHelper.removeRiga(this.service.formPreventivo, index);
-            this.refreshPagination();
-        }
+    doAddRow() {
+        this.service.createEmptyRiga().subscribe(newRowDb => {
+            this.service.righePreventivoSignal.update(r => [...r, newRowDb]);
+            this.formService.addRiga(this.service.formPreventivo, newRowDb);
+            const totRow = this.dataPagService.filtered().length;
+            console.log({ totRow })
+            console.log(this.dataPagService.totalPages())
+            this.dataPagService.goToCorrectPage(totRow);
+        });
     }
-    // Aggiorna le righe nel paginatore
-    private refreshPagination() {
-        const updatedRighe = this.formHelper.getRighe(this.service.formPreventivo)
-            .controls.map((rigaFormGroup) => rigaFormGroup.getRawValue() as RighePreventivoModel);
-        this.righeSignal.set(updatedRighe);
-        this.dataPagService.updateDataWithoutResetPage(this.righeSignal);
+    doDeleteRow(id: number) {
+        this.service.deleteRigaPreventivoById(id).subscribe(rowDeleted => {
+            this.formService.removeRigaById(this.service.formPreventivo, id);
+            this.service.removeRigaPreventivoSignalById(id);
+        });
+
     }
 }

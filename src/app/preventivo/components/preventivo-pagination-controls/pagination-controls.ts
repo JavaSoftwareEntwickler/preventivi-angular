@@ -13,7 +13,10 @@ import { PreventivoManagementService } from '../../services/preventivo-managment
     styleUrls: ['./pagination-controls.css']
 })
 export class PreventivoPaginationControlsComponent {
-    constructor(public dataPagService: DynamicPaginationService<PreventivoModel>, private service: PreventivoManagementService) {
+    constructor(
+        public dataPagService: DynamicPaginationService<PreventivoModel>,
+        private service: PreventivoManagementService
+    ) {
         this.dataPagService.setData(this.service.preventivi);
     }
     prev() { this.dataPagService.goToPage(this.dataPagService.currentPage() - 1); }

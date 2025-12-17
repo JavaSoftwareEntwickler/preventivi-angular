@@ -15,9 +15,12 @@ import { PreventivoModel } from '../../models/preventivo-model';
 })
 export class PreventivoTableViewComponent {
     @Output() rowClick = new EventEmitter<any>();
-    constructor(public service: PreventivoManagementService, public svc: DynamicPaginationService<PreventivoModel>) {
-        this.svc.setData(this.service.preventivi);
+    constructor(
+        public service: PreventivoManagementService,
+        public dataPaginationService: DynamicPaginationService<PreventivoModel>
+    ) {
+        this.dataPaginationService.setData(this.service.preventivi);
     }
-    changeSort(col: string) { this.svc.changeSort(col); }
+    changeSort(col: string) { this.dataPaginationService.changeSort(col); }
     open(p: any) { this.rowClick.emit(p); }
 }

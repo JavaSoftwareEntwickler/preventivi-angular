@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output, signal, SimpleChanges } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { PreventivoFormService } from '../../services/form.service';
 import { DynamicPaginationService } from '../../../shared/services/dynamic-pagination.service';
 import { RighePreventivoModel } from '../../models/righe-preventivo-model';
@@ -47,29 +47,12 @@ export class PreventivoFormEditComponent implements OnChanges {
 
         }
     }
-    // Aggiorna le righe nel paginatore
-    private refreshPagination() {
-        const updatedRighe = this.frmAdapter.getRighe(this.service.formPreventivo)
-            .controls.map((rigaFormGroup) => rigaFormGroup.getRawValue() as RighePreventivoModel);
-        const righeSignal = signal<RighePreventivoModel[]>(updatedRighe);
-        this.dataPagService.updateDataWithoutResetPage(righeSignal);
-    }
 
-    visibleRighe() {
-        const start = (this.dataPagService.currentPage() - 1) * this.dataPagService.pageSize;
-        const allRigheForm = this.frmAdapter.getRighe(this.service.formPreventivo).controls;
-        const visibleRighe = allRigheForm.filter((ctrl, idx) => idx >= start && idx < start + this.dataPagService.pageSize);
-        return visibleRighe.map((ctrl, idx) => {
-            const realIndex = allRigheForm.findIndex(item => item === ctrl);
-            const rowDataId = ctrl.getRawValue().id;
-            return {
-                ctrl,
-                realIndex
-            };
-        });
-    }
-    trackByFn(index: number, item: any): number {
-        return item.realIndex;  // Usa l'indice reale
+    getFormGroupById(id: any): FormGroup {
+        return this.frmAdapter
+            .getRighe(this.service.formPreventivo)
+            .controls
+            .find(ctrl => ctrl.get('id')?.value === id) as FormGroup;
     }
 
     prev() {

@@ -8,10 +8,10 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let p of svc.paginated()" (click)="open(p)">
+        <tr *ngFor="let p of dataPaginationService.paginated()" (click)="open(p)">
             <td>{{p.id}}</td>
             <td>{{p.nomeCliente}}</td>
-            <td>{{p.dataPreventivo}}</td>
+            <td>{{p.dataPreventivo | date:'dd/MM/yyyy'}}</td>
             <td>{{p.importoTotale | number:'1.2-2'}}</td>
         </tr>
     </tbody>

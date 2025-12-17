@@ -60,21 +60,20 @@
     </div> -->
 
             <tbody formArrayName="righe">
-                <tr *ngFor="let riga of visibleRighe();let i = index; trackBy: trackByFn" [formGroupName]="
-                riga.realIndex">
-                    <td><input [id]="'descrizione_' + riga.realIndex" name="descrizione" type="text"
+
+                <tr *ngFor="let riga of dataPagService.paginated();" [formGroup]="getFormGroupById(riga.id)">
+                    <td><input [id]="'descrizione_' + riga.id" name="descrizione" type="text"
                             formControlName="descrizione" /></td>
-                    <td><input [id]="'um_' + riga.realIndex" name="um" type="text" formControlName="um" /></td>
-                    <td><input [id]="'quantita_' + riga.realIndex" name="quantita" type="number"
-                            formControlName="quantita" /></td>
-                    <td><input [id]="'importo_' + riga.realIndex" name="importo" type="number"
-                            formControlName="importo" />
+                    <td><input [id]="'um_' + riga.id" name="um" type="text" formControlName="um" /></td>
+                    <td><input [id]="'quantita_' + riga.id" name="quantita" type="number" formControlName="quantita" />
                     </td>
-                    <td><input [id]="'importo-tot_' + riga.realIndex" name="importo-tot" type="number"
+                    <td><input [id]="'importo_' + riga.id" name="importo" type="number" formControlName="importo" />
+                    </td>
+                    <td><input [id]="'importo-tot_' + riga.id" name="importo-tot" type="number"
                             formControlName="importoTotale" /></td>
                     @if (isEditing) {
                     <td>
-                        <button type="button" class="icon-btn delete" (click)="deleteRow.emit(riga.realIndex)">
+                        <button type="button" class="icon-btn delete" (click)="deleteRow.emit(riga.id)">
                             <i class="fal fa-trash"></i>
                         </button>
                     </td>
@@ -86,7 +85,7 @@
     }
     @if (isMobile()) {
     <div class="righe-card-container" formArrayName="righe">
-        <div class="riga-card" *ngFor="let riga of visibleRighe(); trackBy: trackByFn" [formGroupName]="riga.realIndex">
+        <div class="riga-card" *ngFor="let riga of dataPagService.paginated();" [formGroup]="getFormGroupById(riga.id)">
 
             <div class="card-field">
                 <label>Descrizione</label>
@@ -114,7 +113,7 @@
             </div>
 
             @if (isEditing) {
-            <button class="icon-btn delete" (click)="deleteRow.emit(riga.realIndex)">
+            <button class="icon-btn delete" (click)="deleteRow.emit(riga.id)">
                 <i class="fal fa-trash"></i> Elimina
             </button>
             }

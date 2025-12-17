@@ -15,8 +15,8 @@ import { PreventivoManagementService } from '../../services/preventivo-managment
 })
 export class PreventivoListViewComponent {
     @Output() openDetail = new EventEmitter<any>();
-    constructor(public svc: PreventivoManagementService) { }
+    constructor(public service: PreventivoManagementService) { }
 
-    nuovoPreventivo() { this.svc.nuovoPreventivo(); }
+    nuovoPreventivo() { this.service.nuovoPreventivo().subscribe({}) }
     onRowClick(p: any) { this.openDetail.emit(p); }
 }
