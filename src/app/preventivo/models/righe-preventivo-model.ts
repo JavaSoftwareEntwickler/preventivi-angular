@@ -1,5 +1,5 @@
 export interface RighePreventivoModel {
-    id: number;
+    id?: number;
     descrizione: string;
     um: string;
     quantita: number;
