@@ -4,20 +4,25 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PreventivoModel } from '../models/preventivo-model';
 import { Subject } from 'rxjs/internal/Subject';
 import { positiveNumberValidator } from '../../shared/helper/validators-helper';
+import { DatePipe } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class PreventivoFormService {
 
     private destroy$ = new Subject<void>();  // Subject per gestire la disiscrizione
 
-    constructor(private fb: FormBuilder) { }
+    constructor(
+        private fb: FormBuilder,
+        private datePipe: DatePipe
+    ) { }
 
     /** Costruzione form */
     buildForm() {
+        const oggi = new Date();
         return this.fb.group({
             id: [{ value: 0, disabled: true }],
             nomeCliente: ['', Validators.required],
-            dataPreventivo: ['', [Validators.required]],
+            dataPreventivo: [this.datePipe.transform(oggi, 'yyyy-MM-dd'), [Validators.required]],
             importoTotale: [0, [Validators.required, positiveNumberValidator()]],
             righe: this.fb.array([]),
         });
@@ -28,7 +33,7 @@ export class PreventivoFormService {
         form.patchValue({
             id: model.id,
             nomeCliente: model.nomeCliente,
-            dataPreventivo: model.dataPreventivo,
+            dataPreventivo: this.datePipe.transform(model.dataPreventivo, 'yyyy-MM-dd'),
             importoTotale: model.importoTotale,
         });
 
@@ -66,13 +71,13 @@ export class PreventivoFormService {
         form.reset({
             id: null,
             nomeCliente: '',
-            dataPreventivo: '',
+            dataPreventivo: this.datePipe.transform(Date.now(), 'yyyy-MM-dd'),
             importoTotale: 1
         });
 
         // Resetta e aggiungi una riga vuota
         this.resetRighe(form);
-        this.addRiga(form);  // Aggiungi una riga vuota
+        //this.addRiga(form);  
 
         form.enable();
         form.controls['id'].disable();
@@ -96,7 +101,7 @@ export class PreventivoFormService {
      * @returns FormGroup per la riga
      */
     createRiga(r?: {
-        id: number,
+        id?: number,
         descrizione: string,
         um: string,
         quantita: number,
@@ -123,7 +128,7 @@ export class PreventivoFormService {
 
     addRiga(form: FormGroup,
         r?: {
-            id: number,
+            id?: number,
             descrizione: string,
             um: string,
             quantita: number,
@@ -145,6 +150,12 @@ export class PreventivoFormService {
         // Dopo la rimozione, aggiorniamo il totale del preventivo
         const righeFA = this.getRighe(form); // Otteniamo il FormArray delle righe
         this.updateTotalePreventivo(righeFA); // Ricalcoliamo il totale
+    }
+    removeRigaById(form: FormGroup, id: number) {
+        const righe = this.getRighe(form);
+        const index = righe.controls.findIndex(c => c.get('id')?.value === id);
+        if (index >= 0) righe.removeAt(index);
+        this.updateTotalePreventivo(this.getRighe(form));
     }
 
     resetRighe(form: FormGroup) {
