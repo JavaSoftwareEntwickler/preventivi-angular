@@ -1,59 +1,174 @@
 # Preventivo
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+Applicazione web per la **gestione e la creazione di preventivi**, composta da:
+- **Frontend** in Angular
+- **Backend** REST separato (Node.js)
 
-## Development server
+Il progetto consente la gestione completa dei preventivi e delle relative righe, con
+paginazione, form reattivi e persistenza su database.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## 🧱 Architettura
+
+Il progetto è strutturato come **frontend + backend separati**:
+
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+/preventivo        → Frontend Angular
+/server-be         → Backend Node.js / Express
 
-## Code scaffolding
+````
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Il frontend comunica con il backend tramite **API REST**
+- Le righe di preventivo sono gestite come risorsa indipendente
+- Stato e UI basati su **Signals** e servizi dedicati
+
+---
+
+## 🚀 Stack Tecnologico
+
+### Frontend
+- **Angular 20**
+- Angular Material
+- RxJS
+- Reactive Forms
+- Signals
+- Prettier
+
+### Backend
+- Node.js
+- Express
+- TypeORM
+- Database relazionale (configurabile)
+
+---
+
+## 📦 Requisiti
+
+- Node.js ≥ 18
+- npm ≥ 9
+- Angular CLI ≥ 20
+- Database configurato per il backend
+
+---
+
+## ▶️ Avvio del progetto
+
+### Avvio frontend + backend (sviluppo)
 
 ```bash
-ng generate component component-name
-```
+npm run dev
+````
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Questo comando avvia:
 
-```bash
-ng generate --help
-```
+* Angular su `http://localhost:4200`
+* Backend su `http://localhost:8088`
 
-## Building
+---
 
-To build the project run:
+### Avvio singolo
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+#### Frontend
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+#### Backend
 
 ```bash
-ng e2e
+cd server-be
+npm run serve
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📑 Script disponibili
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Script          | Descrizione                               |
+| --------------- | ----------------------------------------- |
+| `npm run dev`   | Avvia frontend e backend in due terminali |
+| `npm start`     | Avvia Angular                             |
+| `npm run build` | Build di produzione                       |
+| `npm run watch` | Build in modalità watch                   |
+| `npm test`      | Esegue i test                             |
+| `npm run doc`   | Genera documentazione con Compodoc        |
+
+---
+
+## 🔌 API REST principali
+
+### Preventivi
+
+* `GET /preventivi`
+* `POST /preventivi`
+* `PUT /preventivi/:id`
+* `DELETE /preventivi/:id`
+
+### Righe Preventivo
+
+* `GET /righe-preventivo`
+* `POST /righe-preventivo`
+* `PUT /righe-preventivo/:id`
+* `DELETE /righe-preventivo/:id`
+
+---
+
+## 🧠 Caratteristiche principali
+
+* Creazione e modifica preventivi
+* Gestione righe con CRUD dedicato
+* Paginazione dinamica
+* Form reattivi con validazione
+* Separazione chiara tra:
+
+  * UI
+  * Stato applicativo
+  * API
+  * Persistenza
+
+---
+
+## 📚 Documentazione
+
+Per generare la documentazione del frontend:
+
+```bash
+npm run doc
+```
+
+La documentazione sarà disponibile in una cartella dedicata ed esposta tramite server locale.
+
+---
+
+## 🧪 Testing
+
+* Test unitari con Jasmine e Karma
+* Setup pronto per estensione test di integrazione
+
+---
+
+## ✨ Stile del codice
+
+Il progetto utilizza **Prettier** con le seguenti regole principali:
+
+* `printWidth: 100`
+* `singleQuote: true`
+* parser Angular per template HTML
+
+---
+
+## 📌 Note
+
+* Il backend deve essere avviato prima di utilizzare il frontend
+* Le configurazioni di database e ambiente sono gestite lato backend
+* Il progetto è pensato per estensioni future (auth, PDF, export, ecc.)
+
+---
+
+## 👤 Autore
+
+Progetto per la gestione di preventivi
+Sviluppato a scopo applicativo e didattico
