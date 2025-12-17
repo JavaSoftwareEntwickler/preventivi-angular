@@ -1,6 +1,6 @@
 import { Injectable, signal, } from '@angular/core';
 import { FormGroup, } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { PreventivoModel } from '../models/preventivo-model';
 import { PreventivoFormService } from './form.service';
 import { RighePreventivoModel } from '../models/righe-preventivo-model';
@@ -38,6 +38,9 @@ export class PreventivoManagementService {
 
     /** Lista dei preventivi in memoria */
     private _preventivi = signal<PreventivoModel[]>([]);
+
+    righePreventivoSignal = signal<RighePreventivoModel[]>([]);
+
 
     /** Form creato dal FormAdapter */
     formPreventivo: FormGroup;
@@ -103,8 +106,11 @@ export class PreventivoManagementService {
         this.pageMode.set('detail');
         this.isEditing.set(false);
 
+
         // Popola il form con i dettagli del preventivo selezionato
         /** ⬇️ Patching delegato al FormAdapter */
+        this.righePreventivoSignal.set(p.righe);
+        console.log("ecco le righe signal", this.righePreventivoSignal())
         this.formAdapter.patch(p, this.formPreventivo);
 
         // Resetta e popola le righe del preventivo
@@ -152,11 +158,7 @@ export class PreventivoManagementService {
         // Disabilita il form
         this.formPreventivo.disable();
     }
-
-    /**
-     * Inizializza la creazione di un nuovo preventivo
-     */
-    nuovoPreventivo() {
+    nuovoPreventivo_old() {
         this.selectedPreventivo.set(null);
         this.pageMode.set('detail');
         this.isCreating.set(true);
@@ -164,7 +166,25 @@ export class PreventivoManagementService {
 
         // Resetta il form per la creazione di un nuovo preventivo
         this.formAdapter.prepareFormForNew(this.formPreventivo);
+    }
 
+    /**
+     * Inizializza la creazione di un nuovo preventivo
+     */
+    nuovoPreventivo(): Observable<boolean> {
+        this.righePreventivoSignal.set([]);
+        this.selectedPreventivo.set(null);
+        this.pageMode.set('detail');
+        this.isCreating.set(true);
+        this.isEditing.set(true);
+        // Resetta il form per la creazione di un nuovo preventivo
+        this.formAdapter.prepareFormForNew(this.formPreventivo);
+        return this.createEmptyRiga().pipe(tap(
+            newRowDb => {
+                this.righePreventivoSignal.update(r => [...r, newRowDb]);
+                this.formAdapter.addRiga(this.formPreventivo, newRowDb);
+            }),
+            map(() => true));
     }
 
     /**
@@ -228,9 +248,29 @@ export class PreventivoManagementService {
         const ok = confirm('Confermi di voler eliminare il preventivo ID ' + p.id + '?');
         if (ok) {
             this._preventivi.set(this._preventivi().filter(x => x.id !== p.id));
-            this.apiCrudService.delete(p.id).subscribe({});
+            this.apiPreventivoService.delete(p.id).subscribe({});
+            this.righePreventivoSignal.set([]);
             this.backToList();
         }
+    }
+
+    removeRigaPreventivoSignalById(id: number) {
+        this.righePreventivoSignal.update(r => r.filter(x => x.id !== id));
+    }
+    deleteRigaPreventivoById(id: number): Observable<RighePreventivoModel> {
+        return this.apiRighePreventivoService.delete(id);
+    }
+
+    createEmptyRiga(): Observable<RighePreventivoModel> {
+        var newRiga: RighePreventivoModel = {
+            id: undefined,
+            descrizione: "",
+            um: '',
+            quantita: 1,
+            importo: 1,
+            importoTotale: 1
+        }
+        return this.apiRighePreventivoService.create(newRiga);
     }
 
     /**
