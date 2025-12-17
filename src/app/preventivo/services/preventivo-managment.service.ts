@@ -2,8 +2,10 @@ import { Injectable, signal, } from '@angular/core';
 import { FormGroup, } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { PreventivoModel } from '../models/preventivo-model';
-import { ApiCrudService } from '../../shared/services/api-crud.service';
 import { PreventivoFormService } from './form.service';
+import { RighePreventivoModel } from '../models/righe-preventivo-model';
+import { PreventivoApiService } from './preventivo-api.service';
+import { RighePreventivoApiService } from './righe-preventivo-api.service';
 
 /**
  * Servizio di gestione dei preventivi.
@@ -45,9 +47,12 @@ export class PreventivoManagementService {
      *  per eseguire il recupero di tutti i preventivi.
      * -il form adapter 
     */
-    constructor(private apiCrudService: ApiCrudService<PreventivoModel>, private formAdapter: PreventivoFormService) {
+    constructor(
+        private apiPreventivoService: PreventivoApiService,
+        private apiRighePreventivoService: RighePreventivoApiService,
+        private formAdapter: PreventivoFormService
+    ) {
         this.formPreventivo = this.formAdapter.buildForm();
-        this.apiCrudService.setApiUrl(`${this.url}/preventivi`);
         this.getPreventivi()
             .subscribe(data => {
                 // Inizializza i preventivi
@@ -74,7 +79,7 @@ export class PreventivoManagementService {
      * @returns Observable contenente un array di PreventivoModel
      */
     public getPreventivi(): Observable<PreventivoModel[]> {
-        return this.apiCrudService.getAll();
+        return this.apiPreventivoService.getAll();
     }
 
     /** Getter pubblico per accedere ai preventivi */
@@ -182,7 +187,7 @@ export class PreventivoManagementService {
     }
 
     private creaPreventivo(formValuePerSignal: PreventivoModel) {
-        this.apiCrudService.create(formValuePerSignal).subscribe({
+        this.apiPreventivoService.create(formValuePerSignal).subscribe({
             next: (preventivoCreato) => {
                 formValuePerSignal.id = preventivoCreato.id;
                 // Aggiungi il preventivo alla lista locale signal
@@ -198,9 +203,8 @@ export class PreventivoManagementService {
 
     private aggiornaPreventivo(formValuePerSignal: PreventivoModel) {
         const updated = { ...this.selectedPreventivo()!, ...formValuePerSignal };
-        this.apiCrudService.update(formValuePerSignal.id, formValuePerSignal).subscribe({
+        this.apiPreventivoService.update(formValuePerSignal.id, formValuePerSignal).subscribe({
             next: (preventivoAggiornato) => {
-                console.log("ricevo dal db:", preventivoAggiornato.righe)
                 // Aggiorna il preventivo alla lista locale signal
                 // Sostituisci il vecchio preventivo con quello aggiornato che contiene le righe con gli ID restituiti dal ApiSerivice
                 this._preventivi.set(this._preventivi().map(p =>
