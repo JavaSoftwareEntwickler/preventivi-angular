@@ -171,7 +171,7 @@ Il progetto utilizza **Prettier** con le seguenti regole principali:
 ## 👤 Autore
 
 Sviluppato da **Max Marchesini**  
-Sito web: https://www.maxmarchesini.it
+Sito web: https://maxmarchesini.it
 
 Progetto per la gestione di preventivi
 Sviluppato a scopo applicativo e didattico
