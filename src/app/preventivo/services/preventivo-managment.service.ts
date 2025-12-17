@@ -280,4 +280,12 @@ export class PreventivoManagementService {
     printPreventivo(p: PreventivoModel) {
         alert('Generazione PDF simulata per preventivo ID: ' + p.id);
     }
+
+    /**
+ * Funzione simulata per clonare il preventivo
+ * @param p Preventivo di cui generare un clone
+ */
+    clonePreventivo(p: PreventivoModel) {
+        alert('Clona il preventivo ID: ' + p.id);
+    }
 }

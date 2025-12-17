@@ -137,11 +137,12 @@
         <button type="button" class="icon-btn print" (click)="print.emit()">
             <i class="fal fa-print"></i>
         </button>
-
+        <button type="button" class="icon-btn print" (click)="clone.emit()">
+            <i class="fal fa-clone"></i>
+        </button>
         <button type="button" class="icon-btn edit" (click)="edit.emit()">
             <i class="fal fa-pencil"></i>
         </button>
-
         <button type="button" class="icon-btn delete" (click)="delete.emit()">
             <i class="fal fa-trash"></i>
         </button>
@@ -150,16 +151,12 @@
         <button type="button" class="icon-btn edit">
             <i class="fal fa-plus" (click)="addRow.emit()"></i>
         </button>
-
         <button type="submit" class="icon-btn edit">
             <i class="fal fa-save"></i>
         </button>
-
         <button type="button" class="icon-btn close" (click)="cancel.emit()">
             <i class="fal fa-times"></i>
         </button>
-
         }
-
     </div>
 </form>

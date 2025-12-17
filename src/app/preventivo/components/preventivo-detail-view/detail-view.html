@@ -7,6 +7,7 @@
 
     <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="service.formPreventivo"
         [isEditing]="service.isEditing()" (deleteRow)="doDeleteRow($event)" (edit)="startEdit()" (cancel)="cancel()"
-        (print)="doPrint()" (delete)="doDelete()" (addRow)="doAddRow()" (onSubmit)="saveData()"></app-preventivo-form>
+        (print)="doPrint()" (clone)="doClone()" (delete)="doDelete()" (addRow)="doAddRow()"
+        (onSubmit)="saveData()"></app-preventivo-form>
 
 </div>

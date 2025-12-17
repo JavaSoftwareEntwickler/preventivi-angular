@@ -24,6 +24,7 @@ export class PreventivoFormEditComponent implements OnChanges {
     @Output() onSubmit = new EventEmitter<void>();
     @Output() cancel = new EventEmitter<void>();
     @Output() print = new EventEmitter<void>();
+    @Output() clone = new EventEmitter<void>();
     @Output() delete = new EventEmitter<void>();
     @Output() addRow = new EventEmitter<void>();
     isMobile = signal(window.innerWidth < 1058);

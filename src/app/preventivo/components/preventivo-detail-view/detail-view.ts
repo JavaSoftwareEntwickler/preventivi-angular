@@ -52,6 +52,10 @@ export class PreventivoDetailViewComponent {
         if (this.preventivo)
             this.service.printPreventivo(this.preventivo);
     }
+    doClone() {
+        if (this.preventivo)
+            this.service.clonePreventivo(this.preventivo);
+    }
     doDelete() {
         if (this.preventivo) {
             this.service.deletePreventivo(this.preventivo);
