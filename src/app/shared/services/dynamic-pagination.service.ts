@@ -47,22 +47,6 @@ export class DynamicPaginationService<T> {
         });
     }
 
-    /**
-     * Imposta il segnale esterno dei dati da cui la paginazione deve derivare.
-     * Viene creato un effetto reattivo che aggiorna i dati interni
-     * e resetta la pagina corrente quando i dati cambiano.
-     *
-     * @param dataSignal Signal esterno contenente l'array di dati
-     */
-    setDataStatic(dataSignal: Signal<T[]>) {
-        this._data.set(dataSignal());
-        this.currentPage.set(1); // reset page quando i dati cambiano
-    }
-
-    updateDataWithoutResetPage(dataSignal: Signal<T[]>) {
-        this._data.set(dataSignal());           // aggiorna dati
-    }
-
     /** Dati filtrati secondo il termine di ricerca */
     filtered = computed(() => {
         const q = this.searchTerm().toLowerCase();
@@ -137,14 +121,13 @@ export class DynamicPaginationService<T> {
         }
     }
 
-    goToCorrectPage(totalRowsForm: number) {
+    goToCorrectPage(totalRows: number) {
         // Calcola la pagina corretta per la nuova riga
-        const totalPages = Math.ceil(totalRowsForm / this.pageSize);
         // Se la pagina corrente è maggiore del totale delle pagine, ripristina alla pagina 1
-        if (this.currentPage() > totalPages) {
+        if (this.currentPage() > this.totalPages()) {
             this.goToPage(1);
         } else {
-            const targetPage = Math.ceil(totalRowsForm / this.pageSize);
+            const targetPage = Math.ceil(totalRows / this.pageSize);
             this.goToPage(targetPage);  // Sposta alla pagina corretta
         }
     }
