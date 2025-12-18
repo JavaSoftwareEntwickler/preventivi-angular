@@ -6,6 +6,7 @@ import { PreventivoFormService } from './form.service';
 import { RighePreventivoModel } from '../models/righe-preventivo-model';
 import { PreventivoApiService } from './preventivo-api.service';
 import { RighePreventivoApiService } from './righe-preventivo-api.service';
+import { PdfApiService } from './pdf-api.service';
 
 /**
  * Servizio di gestione dei preventivi.
@@ -53,8 +54,8 @@ export class PreventivoManagementService {
     constructor(
         private apiPreventivoService: PreventivoApiService,
         private apiRighePreventivoService: RighePreventivoApiService,
-        private preventivoFormService: PreventivoFormService
-    ) {
+        private preventivoFormService: PreventivoFormService,
+        private preventivoPdfService: PdfApiService) {
         this.formPreventivo = this.preventivoFormService.buildForm();
         this.getPreventivi()
             .subscribe(data => {
@@ -306,13 +307,10 @@ export class PreventivoManagementService {
      */
     printPreventivo(p: PreventivoModel) {
         alert('Generazione PDF simulata per preventivo ID: ' + p.id);
+        this.preventivoPdfService.getPdfPreventivo(p.id).subscribe(blob => {
+            const url = URL.createObjectURL(blob);
+            window.open(url);
+        });
     }
 
-    /**
- * Funzione simulata per clonare il preventivo
- * @param p Preventivo di cui generare un clone
- */
-    clonePreventivo(p: PreventivoModel) {
-        alert('Clona il preventivo ID: ' + p.id);
-    }
 }
