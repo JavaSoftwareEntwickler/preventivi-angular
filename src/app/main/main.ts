@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BREAKPOINT_SMALL } from '../shared/helper/constants';
+import { LoadingBar } from "../preventivo/components/loading-bar/loading-bar";
 
 @Component({
     selector: 'app-main',
     standalone: true,
-    imports: [RouterOutlet, CommonModule],
+    imports: [RouterOutlet, CommonModule, LoadingBar],
     templateUrl: './main.html',
     styleUrl: './main.css',
 })

@@ -42,6 +42,7 @@ export class PreventivoManagementService {
 
     righePreventivoSignal = signal<RighePreventivoModel[]>([]);
 
+    isPdfLoading = signal<boolean>(false);
 
     /** Form creato dal FormAdapter */
     formPreventivo: FormGroup;
@@ -306,10 +307,11 @@ export class PreventivoManagementService {
      * @param p Preventivo di cui generare il PDF
      */
     printPreventivo(p: PreventivoModel) {
-        alert('Generazione PDF simulata per preventivo ID: ' + p.id);
+        this.isPdfLoading.set(true);
         this.preventivoPdfService.getPdfPreventivo(p.id).subscribe(blob => {
             const url = URL.createObjectURL(blob);
             window.open(url);
+            this.isPdfLoading.set(false);
         });
     }
 
