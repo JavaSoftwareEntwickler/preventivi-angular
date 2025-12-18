@@ -53,9 +53,9 @@ export class PreventivoManagementService {
     constructor(
         private apiPreventivoService: PreventivoApiService,
         private apiRighePreventivoService: RighePreventivoApiService,
-        private formAdapter: PreventivoFormService
+        private preventivoFormService: PreventivoFormService
     ) {
-        this.formPreventivo = this.formAdapter.buildForm();
+        this.formPreventivo = this.preventivoFormService.buildForm();
         this.getPreventivi()
             .subscribe(data => {
                 // Inizializza i preventivi
@@ -105,19 +105,9 @@ export class PreventivoManagementService {
         this.selectedPreventivo.set(p);
         this.pageMode.set('detail');
         this.isEditing.set(false);
-
-
-        // Popola il form con i dettagli del preventivo selezionato
-        /** ⬇️ Patching delegato al FormAdapter */
+        this.isCreating.set(false);
         this.righePreventivoSignal.set(p.righe);
-        console.log("ecco le righe signal", this.righePreventivoSignal())
-        this.formAdapter.patch(p, this.formPreventivo);
-
-        // Resetta e popola le righe del preventivo
-        //this.righeFormArray.clear();
-        //p.righe.forEach(r => this.righeFormArray.push(this.createRiga(r)));
-
-        // Disabilita il form per la visualizzazione dei dettagli
+        this.preventivoFormService.patch(p, this.formPreventivo);
         this.formPreventivo.disable();
     }
 
@@ -141,7 +131,7 @@ export class PreventivoManagementService {
         this.isEditing.set(true);
         this.formPreventivo.enable();
         this.formPreventivo.controls['id'].disable(); // Il campo ID non può essere modificato
-        this.formAdapter.abilitaRighe(this.formPreventivo); // Abilita le righe
+        this.preventivoFormService.abilitaRighe(this.formPreventivo); // Abilita le righe
     }
 
     /**
@@ -152,8 +142,8 @@ export class PreventivoManagementService {
         this.isEditing.set(false);
 
         // Ripristina i valori originali del preventivo
-        /** ⬇️ Ripristino patch tramite adapter */
-        this.formAdapter.patch(this.selectedPreventivo()!, this.formPreventivo);
+        /** Ripristino patch tramite preventivoFormService */
+        this.preventivoFormService.patch(this.selectedPreventivo()!, this.formPreventivo);
 
         // Disabilita il form
         this.formPreventivo.disable();
@@ -165,7 +155,7 @@ export class PreventivoManagementService {
         this.isEditing.set(true);
 
         // Resetta il form per la creazione di un nuovo preventivo
-        this.formAdapter.prepareFormForNew(this.formPreventivo);
+        this.preventivoFormService.prepareFormForNew(this.formPreventivo);
     }
 
     /**
@@ -194,7 +184,7 @@ export class PreventivoManagementService {
      * -Aggiorna il preventivo alla lista locale signal
      */
     savePreventivo() {
-        const formValuePerSignal = this.formAdapter.mapToModel(this.formPreventivo);
+        const formValuePerSignal = this.preventivoFormService.mapToModel(this.formPreventivo);
         // Se stiamo creando un nuovo preventivo
         if (this.isCreating()) {
             // Chiamata al servizio per creare il preventivo
