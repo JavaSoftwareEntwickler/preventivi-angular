@@ -28,13 +28,7 @@ export class PreventivoDetailViewComponent {
         this.dataPagService.setData(this.service.righePreventivoSignal);
     }
     ngOnInit(): void {
-        if (this.service.isCreating()) {
-            this.titolo = 'Aggiungi Preventivo';
-        } else if (this.service.isEditing()) {
-            this.titolo = 'Modifica Preventivo';
-        } else {
-            this.titolo = 'Dettaglio Preventivo';
-        }
+
     }
     /** Metodo per il submit del form */
     saveData() {

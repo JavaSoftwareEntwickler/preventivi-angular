@@ -2,7 +2,13 @@
     <button class="btn-primary" (click)="back.emit()"><i class="fal fa-arrow-left"></i> Torna alla lista</button>
 
     <div class="action-title">
-        <h2>{{ titolo }}</h2>
+        @if (service.isCreating()) {
+        <h2>Aggiungi Preventivo</h2>
+        } @else if (service.isEditing()) {
+        <h2>Modifica Preventivo</h2>
+        } @else {
+        <h2>Dettaglio Preventivo</h2>
+        }
     </div>
 
     <app-preventivo-form [preventivo]="preventivo" [formPreventivo]="service.formPreventivo"
