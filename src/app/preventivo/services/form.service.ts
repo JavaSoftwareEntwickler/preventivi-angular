@@ -83,6 +83,32 @@ export class PreventivoFormService {
         form.controls['id'].disable();
     }
 
+    /**
+     * Prepara il form per un nuovo preventivo a partire da quello clonato
+     * - Popola i campi clonandoli dal preventivo passato in input
+     * - Setta l'id del preventivo a null
+     * - Resetta le righe del preventivo
+     * - Abilita il form per la scrittura 
+     * - Disabilita la possibilità di editare l'id
+     * @param p PreventivoModel da clonare
+     * @param form FormGroup da preparare per l'inserimento del preventivo clonato
+     */
+    prepareFormForClone(p: PreventivoModel, form: FormGroup) {
+        form.reset({
+            id: null,
+            nomeCliente: p.nomeCliente,
+            dataPreventivo: this.datePipe.transform(Date.now(), 'yyyy-MM-dd'),
+            importoTotale: p.importoTotale,
+        });
+
+        // Resetta le righe del preventivo
+        const righeFA = form.get('righe') as FormArray;
+        righeFA.clear();
+
+        form.enable();
+        form.controls['id'].disable();
+    }
+
     // -------------------------------
     // GESTIONE RIGHE (isolata e pulita)
     // -------------------------------

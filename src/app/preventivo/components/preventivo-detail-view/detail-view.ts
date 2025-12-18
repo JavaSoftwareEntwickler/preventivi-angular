@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PreventivoFormEditComponent } from '../preventivo-form-edit/form-edit';
 import { PreventivoManagementService } from '../../services/preventivo-managment.service';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PreventivoFormService } from '../../services/form.service';
 import { RighePreventivoModel } from '../../models/righe-preventivo-model';
 import { DynamicPaginationService } from '../../../shared/services/dynamic-pagination.service';
@@ -48,7 +48,7 @@ export class PreventivoDetailViewComponent {
     }
     doClone() {
         if (this.preventivo)
-            this.service.clonePreventivo(this.preventivo);
+            this.service.clonePreventivo(this.preventivo).subscribe({});
     }
     doDelete() {
         if (this.preventivo) {

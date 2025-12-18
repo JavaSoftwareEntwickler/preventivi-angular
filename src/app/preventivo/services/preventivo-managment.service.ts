@@ -1,6 +1,6 @@
 import { Injectable, signal, } from '@angular/core';
 import { FormGroup, } from '@angular/forms';
-import { map, Observable, tap } from 'rxjs';
+import { concatMap, from, map, Observable, tap } from 'rxjs';
 import { PreventivoModel } from '../models/preventivo-model';
 import { PreventivoFormService } from './form.service';
 import { RighePreventivoModel } from '../models/righe-preventivo-model';
@@ -168,13 +168,50 @@ export class PreventivoManagementService {
         this.isCreating.set(true);
         this.isEditing.set(true);
         // Resetta il form per la creazione di un nuovo preventivo
-        this.formAdapter.prepareFormForNew(this.formPreventivo);
+        this.preventivoFormService.prepareFormForNew(this.formPreventivo);
         return this.createEmptyRiga().pipe(tap(
             newRowDb => {
                 this.righePreventivoSignal.update(r => [...r, newRowDb]);
-                this.formAdapter.addRiga(this.formPreventivo, newRowDb);
+                this.preventivoFormService.addRiga(this.formPreventivo, newRowDb);
             }),
             map(() => true));
+    }
+
+    /**
+    * Funzione simulata per clonare il preventivo
+    * @param p PreventivoModel con cui generare il clone
+    */
+    clonePreventivo(p: PreventivoModel): Observable<boolean> {
+        //Setto gli stati come quelli in aggiunta di un nuovo preventivo
+        console.log("clonePreventivo input righe preventivo: ", p.righe)
+        // Cloniamo il preventivo senza modificare l'originale
+        const preventivoClone: PreventivoModel = {
+            ...p,
+            righe: p.righe.map(r => ({ ...r, id: undefined }))
+        };
+
+        this.selectedPreventivo.set(null);
+        this.pageMode.set('detail');
+        this.isCreating.set(true);
+        this.isEditing.set(true);
+
+        this.preventivoFormService.prepareFormForClone(p, this.formPreventivo as FormGroup);
+
+        const righePreventivo = preventivoClone.righe;
+        preventivoClone.righe = [];
+        this.righePreventivoSignal.set([]);
+        console.log("clonePreventivo righe preventivo: dopo manipolazione clone", p.righe)
+        return from(righePreventivo).pipe(
+            concatMap(riga =>
+                this.apiRighePreventivoService.create(riga).pipe(
+                    tap(newRigaDb => {
+                        this.righePreventivoSignal.update(r => [...r, newRigaDb]);
+                        preventivoClone.righe.push(newRigaDb);
+                        this.preventivoFormService.addRiga(this.formPreventivo as FormGroup, newRigaDb);
+                    })
+                )
+            ), map(() => true)
+        );
     }
 
     /**
