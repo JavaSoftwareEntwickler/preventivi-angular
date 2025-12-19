@@ -185,11 +185,10 @@ export class PreventivoManagementService {
     */
     clonePreventivo(p: PreventivoModel): Observable<boolean> {
         //Setto gli stati come quelli in aggiunta di un nuovo preventivo
-        console.log("clonePreventivo input righe preventivo: ", p.righe)
         // Cloniamo il preventivo senza modificare l'originale
         const preventivoClone: PreventivoModel = {
             ...p,
-            righe: p.righe.map(r => ({ ...r, id: undefined }))
+            righe: p.righe.sort((a, b) => (a.id ?? 0) - (b.id ?? 0)).map(r => ({ ...r, id: undefined }))
         };
 
         this.selectedPreventivo.set(null);
