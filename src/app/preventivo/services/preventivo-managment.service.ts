@@ -64,6 +64,7 @@ export class PreventivoManagementService {
                 this._preventivi.set(data.map(p => ({
                     id: p.id,
                     nomeCliente: p.nomeCliente,
+                    indirizzo: p.indirizzo,
                     dataPreventivo: p.dataPreventivo,
                     importoTotale: p.importoTotale,
                     righe: p.righe.map(r => ({

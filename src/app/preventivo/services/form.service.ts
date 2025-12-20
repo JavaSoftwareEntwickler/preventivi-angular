@@ -22,6 +22,7 @@ export class PreventivoFormService {
         return this.fb.group({
             id: [{ value: 0, disabled: true }],
             nomeCliente: ['', Validators.required],
+            indirizzo: ['', Validators.required],
             dataPreventivo: [this.datePipe.transform(oggi, 'yyyy-MM-dd'), [Validators.required]],
             importoTotale: [0, [Validators.required, positiveNumberValidator()]],
             righe: this.fb.array([]),
@@ -33,6 +34,7 @@ export class PreventivoFormService {
         form.patchValue({
             id: model.id,
             nomeCliente: model.nomeCliente,
+            indirizzo: model.indirizzo,
             dataPreventivo: this.datePipe.transform(model.dataPreventivo, 'yyyy-MM-dd'),
             importoTotale: model.importoTotale,
         });
@@ -71,6 +73,7 @@ export class PreventivoFormService {
         form.reset({
             id: null,
             nomeCliente: '',
+            indirizzo: '',
             dataPreventivo: this.datePipe.transform(Date.now(), 'yyyy-MM-dd'),
             importoTotale: 1
         });
@@ -97,6 +100,7 @@ export class PreventivoFormService {
         form.reset({
             id: null,
             nomeCliente: p.nomeCliente,
+            indirizzo: p.indirizzo,
             dataPreventivo: this.datePipe.transform(Date.now(), 'yyyy-MM-dd'),
             importoTotale: p.importoTotale,
         });
