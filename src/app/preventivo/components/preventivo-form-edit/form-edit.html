@@ -1,11 +1,4 @@
 <form class="table-card" [formGroup]="formPreventivo" (ngSubmit)="onSubmit.emit()">
-    <!--     
-    <div class="detail-row">
-        <label for="id">ID</label>
-        <input id="id" type="text" formControlName="id" name="id" />
-    </div> 
-    -->
-
     <div class="detail-row">
         <label for="nomeCliente">Cliente</label>
         <input id="nomeCliente" type="text" formControlName="nomeCliente" name="nomeCliente" />
@@ -41,34 +34,12 @@
                     }
                 </tr>
             </thead>
-            <!-- <tbody formArrayName="righe">
-            <tr *ngFor="let riga of frmAdapter.getRighe(formPreventivo).controls; let i = index" [formGroupName]="i">
-                <td><input [id]="'descrizione_' + i" name="descrizione" type="text" formControlName="descrizione" />
-                </td>
-                <td><input [id]="'um_' + i" name="um" type="text" formControlName="um" /></td>
-                <td><input [id]="'quantita_' + i" name="quantita" type="number" formControlName="quantita" /></td>
-                <td><input [id]="'importo_' + i" name="importo" type="number" formControlName="importo" /></td>
-                <td><input [id]="'importo-tot_' + i" name="importo-tot" type="number" formControlName="importoTotale" />
-                </td>
-            </tr>
-        </tbody>
-
-    </table>
-    <div class="pagination">
-        <button (click)="prev()" [disabled]="dataPagService.currentPage() === 1">
-            <i class="fal fa-chevron-left"></i>
-        </button>
-        <span>Pagina {{ dataPagService.currentPage() }} di {{ dataPagService.totalPages() }}</span>
-        <button (click)="next()" [disabled]="dataPagService.currentPage() === dataPagService.totalPages()">
-            <i class="fal fa-chevron-right"></i>
-        </button>
-    </div> -->
 
             <tbody formArrayName="righe">
 
                 <tr *ngFor="let riga of dataPagService.paginated();" [formGroup]="getFormGroupById(riga.id)">
-                    <td><input [id]="'descrizione_' + riga.id" name="descrizione" type="text"
-                            formControlName="descrizione" /></td>
+                    <td><textarea [id]="'descrizione_' + riga.id" name="descrizione" type="text"
+                            formControlName="descrizione"></textarea></td>
                     <td><input [id]="'um_' + riga.id" name="um" type="text" formControlName="um" /></td>
                     <td><input [id]="'quantita_' + riga.id" name="quantita" type="number" formControlName="quantita" />
                     </td>
@@ -94,7 +65,7 @@
 
             <div class="card-field">
                 <label>Descrizione</label>
-                <input type="text" formControlName="descrizione">
+                <textarea type="text" formControlName="descrizione"></textarea>
             </div>
 
             <div class="card-field">
