@@ -1,0 +1,306 @@
+/* =========================
+   LAYOUT GENERALE
+========================= */
+
+.page-container {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.page-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #012a5b
+}
+
+/* =========================
+   CARD BASE (riuso preventivi)
+========================= */
+
+.table-card {
+    background: linear-gradient(145deg, #ffffff, #f7f7f7);
+    padding: 2rem;
+    border-radius: 0.625rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    height: 100%;
+}
+
+.table-card:hover {
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+/* =========================
+   TITOLI SEZIONI
+========================= */
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #012a5b;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* =========================
+   RIGHE INPUT (stile preventivi)
+========================= */
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row label {
+    width: 35%;
+    font-weight: 500;
+    color: #333;
+}
+
+.detail-row input[type="text"],
+.detail-row input[type="number"],
+.detail-row input[type="file"],
+.detail-row input[type="color"] {
+    width: 60%;
+    padding: 0.6rem;
+    border-radius: 0.312rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+/* =========================
+   UPLOAD FOTO PROFILO
+========================= */
+
+.profile-upload {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-upload input[type="file"] {
+    display: none;
+}
+
+.profile-upload label {
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+}
+
+/* =========================
+   CARICA LOGO: Effetto cerchiato
+========================= */
+.profile-upload img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #012a5b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /* Transizione per il bordo */
+}
+
+
+/* =========================
+   SELEZIONE COLORI (Pallini)
+========================= */
+.color-picker {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    /* Aggiunta per far sì che i pallini si distribuiscano correttamente */
+}
+
+.color-picker input[type="radio"] {
+    display: none;
+}
+
+.color-option {
+    width: 30px;
+    height: 20px;
+    border-radius: 50%;
+    /* Pallini perfetti (cerchi) */
+    border: 2px solid #fff;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 1;
+    /* I colori devono essere visibili anche quando disabilitati */
+}
+
+.color-option:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Quando l'input radio è selezionato, cambia il bordo */
+.color-picker input[type="radio"]:checked+.color-option {
+    border: 3px solid #000;
+}
+
+
+/* =========================
+   TOGGLE / CHECKBOX ROW
+========================= */
+
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.toggle-row:last-child {
+    border-bottom: none;
+}
+
+.toggle-row label {
+    font-weight: 500;
+    color: #333;
+}
+
+.toggle-row input[type="checkbox"] {
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+}
+
+/* =========================
+   SEZIONI PREMIUM
+========================= */
+
+.disabled-section {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.badge-premium {
+    background: #012a5b;
+    color: #ffffff;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 0.3rem;
+    margin-left: 0.6rem;
+    text-transform: uppercase;
+}
+
+.premium-hint {
+    margin-top: auto;
+    /* Spinge il testo verso il fondo della card */
+    font-size: 0.8rem;
+    color: #555;
+    text-align: center;
+    padding-top: 1rem;
+}
+
+/* =========================
+   AZIONI
+========================= */
+
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.btn-primary {
+    padding: 0.7rem 1.4rem;
+    background: #012a5b;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #021f44;
+}
+
+/* =========================
+   STILE BOTTONE "CARICA LOGO"
+========================= */
+
+.btn-upload-logo {
+    padding: 0.6rem 1.2rem;
+    background: #012a5b;
+    color: #ffffff;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    /* Assicura che il bottone si comporti correttamente accanto all'immagine */
+    text-align: center;
+}
+
+/* Effetto hover sul bottone */
+.btn-upload-logo:hover {
+    background: #021f44;
+    transform: scale(1.05);
+    /* Aggiunge un piccolo ingrandimento per l'interazione */
+}
+
+/* Aggiungi un bordo sottile quando il bottone è attivo (focus) */
+.btn-upload-logo:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+    .page-container {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-row,
+    .toggle-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .detail-row label,
+    .toggle-row label {
+        width: 100%;
+    }
+
+    .detail-row input,
+    .toggle-row input {
+        width: 100%;
+    }
+
+}
