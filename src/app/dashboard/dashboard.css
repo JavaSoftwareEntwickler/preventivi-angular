@@ -1,0 +1,127 @@
+.dashboard-container {
+    padding: 2rem;
+    background: #f4f7fa;
+    min-height: 100vh;
+}
+
+/* ROW LAYOUT */
+.dashboard-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+/* CARD GENERICHE */
+.dashboard-card {
+    flex: 1 1 30%;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* HEADER CARD */
+.card-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.card-icon {
+    font-size: 1.8rem;
+    color: #012a5b;
+    margin-right: 0.8rem;
+}
+
+.card-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #012a5b;
+}
+
+/* CONTENUTO CARD */
+.card-content {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* FOOTER CARD */
+.card-footer {
+    padding: 0 1.5rem 1rem 1.5rem;
+    margin-top: auto;
+    /* spinge il footer in basso se la card cresce */
+}
+
+
+/* KPI ROW */
+.kpi-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* SINGOLO KPI */
+.kpi-item {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #012a5b;
+}
+
+.kpi-item .kpi-label {
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+    color: #666;
+}
+
+.kpi-item .kpi-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.kpi-item.success .kpi-value {
+    color: #077711;
+}
+
+.kpi-item.danger .kpi-value {
+    color: #d62828;
+}
+
+.kpi-item.warning .kpi-value {
+    color: #f5a623;
+}
+
+/* CANVAS MINI-GRAPH */
+canvas {
+    width: 100% !important;
+    max-height: 200px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .dashboard-card {
+        flex: 1 1 48%;
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-card {
+        flex: 1 1 100%;
+    }
+
+    .kpi-row {
+        flex-direction: column;
+    }
+}

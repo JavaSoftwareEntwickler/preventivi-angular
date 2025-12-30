@@ -1,106 +1,94 @@
-<h2>Dashboard works!</h2>
-<h2>.</h2>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
+<div class="dashboard-container">
 
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
+    <!-- ROW 1: Preventivi -->
+    <div class="dashboard-row">
+        <!-- CARD PREVENTIVI -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <i class="fas fa-file-alt card-icon"></i>
+                <span class="card-title">Preventivi</span>
+            </div>
+            <div class="card-content">
+                <div class="kpi-row">
+                    <div class="kpi-item total">
+                        <span class="kpi-label">Totale</span>
+                        <span class="kpi-value">128</span>
+                    </div>
+                    <div class="kpi-item warning">
+                        <span class="kpi-label">Aperti</span>
+                        <span class="kpi-value">42</span>
+                    </div>
+                    <div class="kpi-item success">
+                        <span class="kpi-label">Accettati</span>
+                        <span class="kpi-value">61</span>
+                    </div>
+                    <div class="kpi-item danger">
+                        <span class="kpi-label">Rifiutati</span>
+                        <span class="kpi-value">25</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <canvas baseChart [options]="pieChartOptions" [data]="pieChartData" [labels]="pieChartLabels"
+                    [type]="doughnutChartType">
+                </canvas>
+            </div>
+        </div>
 
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
+        <!-- CARD ECONOMICO -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <i class="fas fa-coins card-icon"></i>
+                <span class="card-title">Valore Preventivi</span>
+            </div>
+            <div class="card-content">
+                <div class="kpi-row">
+                    <div class="kpi-item">
+                        <span class="kpi-label">Totale</span>
+                        <span class="kpi-value">€ 485.000</span>
+                    </div>
+                    <div class="kpi-item success">
+                        <span class="kpi-label">Accettati</span>
+                        <span class="kpi-value">€ 312.000</span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-label">Medio</span>
+                        <span class="kpi-value">€ 3.789</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                </div>
+                <canvas baseChart [type]="barChartType" [data]="barChartData" [labels]="barChartLabels"
+                    [options]="barChartOptions">
+                </canvas>
+            </div>
+        </div>
 
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
+        <!-- CARD TREND -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <i class="fas fa-chart-line card-icon"></i>
+                <span class="card-title">Trend</span>
+            </div>
+            <div class="card-content">
+                <div class="kpi-row">
+                    <div class="kpi-item">
+                        <span class="kpi-label">Ultimi 30 Giorni</span>
+                        <span class="kpi-value">18</span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-label">Tasso Accettazione</span>
+                        <span class="kpi-value">71%</span>
+                    </div>
+                </div>
 
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
+            </div>
+            <div class="card-footer">
+                <canvas baseChart [type]="lineChartType" [data]="lineChartData" [labels]="lineChartLabels"
+                    [options]="lineChartOptions">
+                </canvas>
+            </div>
+        </div>
+    </div>
 
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
-<h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo architecto minima voluptate expedita. Aut aliquam
-    perferendis commodi labore odio atque totam praesentium et? Consectetur ducimus, corrupti quidem ipsam quibusdam
-    quisquam.</h2>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium sunt nostrum libero eveniet consequuntur cum qui
-    id dignissimos, alias magnam, voluptatibus aperiam necessitatibus at voluptas et minus, amet doloribus culpa?Lorem
-    ipsum dolor sit amet consectetur adipisicing elit. Quae fugit minima, voluptates ad debitis quisquam quia facilis
-    unde iure, exercitationem error deleniti. Quo, culpa alias dolorum exercitationem quisquam aperiam dolorem.</p>
+</div>
