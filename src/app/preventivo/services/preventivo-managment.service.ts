@@ -67,6 +67,7 @@ export class PreventivoManagementService {
                     indirizzo: p.indirizzo,
                     dataPreventivo: p.dataPreventivo,
                     importoTotale: p.importoTotale,
+                    stato: p.stato,
                     righe: p.righe.map(r => ({
                         id: r.id,
                         descrizione: r.descrizione,
