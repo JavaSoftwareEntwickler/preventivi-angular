@@ -5,6 +5,7 @@ import { PreventivoModel } from '../models/preventivo-model';
 import { Subject } from 'rxjs/internal/Subject';
 import { positiveNumberValidator } from '../../shared/helper/validators-helper';
 import { DatePipe } from '@angular/common';
+import { StatoPreventivo } from '../models/stato-preventivo.model';
 
 @Injectable({ providedIn: 'root' })
 export class PreventivoFormService {
@@ -25,6 +26,7 @@ export class PreventivoFormService {
             indirizzo: ['', Validators.required],
             dataPreventivo: [this.datePipe.transform(oggi, 'yyyy-MM-dd'), [Validators.required]],
             importoTotale: [0, [Validators.required, positiveNumberValidator()]],
+            stato: [StatoPreventivo.APERTO, Validators.required],
             righe: this.fb.array([]),
         });
     }
@@ -37,6 +39,7 @@ export class PreventivoFormService {
             indirizzo: model.indirizzo,
             dataPreventivo: this.datePipe.transform(model.dataPreventivo, 'yyyy-MM-dd'),
             importoTotale: model.importoTotale,
+            stato: model.stato,
         });
 
         // Resetta e popola le righe del preventivo
@@ -75,7 +78,8 @@ export class PreventivoFormService {
             nomeCliente: '',
             indirizzo: '',
             dataPreventivo: this.datePipe.transform(Date.now(), 'yyyy-MM-dd'),
-            importoTotale: 1
+            importoTotale: 1,
+            stato: StatoPreventivo.APERTO
         });
 
         // Resetta e aggiungi una riga vuota
@@ -103,6 +107,7 @@ export class PreventivoFormService {
             indirizzo: p.indirizzo,
             dataPreventivo: this.datePipe.transform(Date.now(), 'yyyy-MM-dd'),
             importoTotale: p.importoTotale,
+            stato: p.stato
         });
 
         // Resetta le righe del preventivo

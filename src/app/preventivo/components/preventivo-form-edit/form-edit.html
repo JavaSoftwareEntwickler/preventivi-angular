@@ -18,6 +18,14 @@
         <label for="importoTotale">Importo</label>
         <input id="importoTotale" type="number" formControlName="importoTotale" name="importoTotale" />
     </div>
+    <div class="detail-row">
+        <label for="stato">Stato preventivo</label>
+        <select id="stato" type="text" name="stato" formControlName="stato">
+            <option value="APERTO">Aperto</option>
+            <option value="ACCETTATO">Accettato</option>
+            <option value="RIFIUTATO">Rifiutato</option>
+        </select>
+    </div>
 
     @if (!isMobile()) {
     <div class="table-righe-responsive">
