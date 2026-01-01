@@ -9,3 +9,13 @@ body {
     font-family: "Roboto", sans-serif;
     background: #f4f7fa;
 }
+
+/* Palette colori*/
+:root {
+    /* arancione */
+    --preventivo-aperto: #f5a623;
+    /* verde */
+    --preventivo-accettato: #077711;
+    /* rosso */
+    --preventivo-rifiutato: #d62828;
+}

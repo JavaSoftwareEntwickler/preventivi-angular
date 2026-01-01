@@ -92,15 +92,18 @@
 }
 
 .kpi-item.success .kpi-value {
-    color: #077711;
+    /* verde */
+    color: var(--preventivo-accettato);
 }
 
 .kpi-item.danger .kpi-value {
-    color: #d62828;
+    /* rosso */
+    --preventivo-rifiutato: #d62828;
 }
 
 .kpi-item.warning .kpi-value {
-    color: #f5a623;
+    /* arancione */
+    --preventivo-aperto: #f5a623;
 }
 
 /* CANVAS MINI-GRAPH */
