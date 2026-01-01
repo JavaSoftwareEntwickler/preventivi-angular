@@ -22,3 +22,25 @@
 .styled-table tbody tr:hover {
     background: #e8eef6
 }
+
+.preventivo-stato-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.preventivo-stato-cell.aperto i {
+    color: var(--preventivo-aperto);
+    /* arancione */
+}
+
+.preventivo-stato-cell.accettato i {
+    /* verde */
+    color: var(--preventivo-accettato);
+
+}
+
+.preventivo-stato-cell.rifiutato i {
+    color: var(--preventivo-rifiutato)
+        /* rosso */
+}

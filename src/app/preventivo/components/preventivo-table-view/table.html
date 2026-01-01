@@ -5,6 +5,7 @@
             <th (click)="changeSort('nomeCliente')">Cliente</th>
             <th (click)="changeSort('dataPreventivo')">Data</th>
             <th (click)="changeSort('importoTotale')">Importo (€)</th>
+            <th (click)="changeSort('stato')">Stato </th>
         </tr>
     </thead>
     <tbody>
@@ -13,6 +14,16 @@
             <td>{{p.nomeCliente}}</td>
             <td>{{p.dataPreventivo | date:'dd/MM/yyyy'}}</td>
             <td>{{p.importoTotale | number:'1.2-2'}}</td>
+            <td class="preventivo-stato-cell" [ngClass]="p.stato.toLowerCase()">
+                <i class="fal" [ngClass]="{
+       'fa-hourglass-half': p.stato === 'APERTO',
+       'fa-check': p.stato === 'ACCETTATO',
+       'fa-times': p.stato === 'RIFIUTATO'
+     }">
+                </i>
+                {{ p.stato | lowercase | titlecase }}
+            </td>
+
         </tr>
     </tbody>
 </table>
