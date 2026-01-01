@@ -9,7 +9,8 @@
     width: 25%
 }
 
-.detail-row input {
+.detail-row input,
+select {
     width: 70%;
     padding: 0.5rem;
     border-radius: 0.312rem;
