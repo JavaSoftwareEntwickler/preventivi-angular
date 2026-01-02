@@ -28,7 +28,9 @@
                             "src/custom-theme.scss",
                             "src/styles.css",
                             "src/assets/fontawesome/css/all.css"
-                        ]
+                        ],
+                        "outputPath": "dist/preventivo/",
+                        "baseHref": "./"
                     },
                     "configurations": {
                         "production": {
