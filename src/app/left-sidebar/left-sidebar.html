@@ -13,8 +13,10 @@
     <div class="sidenav-nav">
         @for (item of items; track $index) {
         <li class="sidenav-nav-item">
-            <a class="sidenav-nav-link" [routerLink]="item.routeLink" routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }" collapseOnNavigate (collapseOnNavigate)="closeSidenav()">
+            <a class="sidenav-nav-link" [routerLink]="item.disabled ? null : item.routeLink"
+                [class.disabled]="item.disabled" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                collapseOnNavigate (collapseOnNavigate)="closeSidenav()"
+                (click)="item.disabled && $event.preventDefault()">
                 <i class="sidenav-link-icon" [class]="item.icon"></i>
                 @if (!isLeftSidebarCollapsed()) {
                 <span class="sidenav-link-text">{{ item.label }}</span>

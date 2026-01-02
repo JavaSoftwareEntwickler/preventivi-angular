@@ -18,21 +18,25 @@ export class LeftSidebar {
             routeLink: 'dashboard',
             icon: 'fal fa-home',
             label: 'Dashboard',
+            disabled: false,
         },
         {
             routeLink: 'preventivo',
             icon: 'fal fa-file',
             label: 'Preventivi',
+            disabled: false,
         },
         {
             routeLink: 'pages',
             icon: 'fal fa-box-open',
             label: 'Prodotti',
+            disabled: true,
         },
         {
             routeLink: 'settings',
             icon: 'fal fa-cog',
             label: 'Settings',
+            disabled: true,
         },
     ];
 

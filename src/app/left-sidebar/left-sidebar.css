@@ -9,6 +9,12 @@
     box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
 }
 
+.sidenav-nav-link.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .sidenav-collapsed {
     width: 5rem;
 }
