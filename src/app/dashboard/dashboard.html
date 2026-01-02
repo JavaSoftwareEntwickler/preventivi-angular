@@ -1,7 +1,30 @@
 <div class="dashboard-container">
+    <!--   YEAR SELECTOR -->
+    <!-- 
+    <div class="year-selector" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <label for="year" style="font-weight: 600; color: #012a5b;">Anno:</label>
+        <select id="year" type="number" name="year" [(ngModel)]="selectedYear"
+            [disabled]="!dashboardService.isProVersion"
+            style="padding: 0.3rem 0.6rem; border-radius: 0.5rem; border: 1px solid #ccc; cursor: pointer;">
+            <option *ngFor="let anno of dashboardService.availableYears()" [value]="anno">
+                {{ anno }}
+            </option>
+        </select>
+-->
+    <!-- Badge Pro -->
+    <!-- 
+        @if(!dashboardService.isProVersion){
+        <span
+            style="background: #f5a623; color: #fff; padding: 0.2rem 0.5rem; border-radius: 0.5rem; font-size: 0.75rem;"
+            title="Disponibile solo in versione Pro">
+            Pro
+        </span>
+        }
+    </div>
+-->
 
-    <!-- ROW 1: Preventivi -->
     <div class="dashboard-row">
+
         <!-- CARD PREVENTIVI -->
         <div class="dashboard-card">
             <div class="card-header">
@@ -12,19 +35,19 @@
                 <div class="kpi-row">
                     <div class="kpi-item total">
                         <span class="kpi-label">Totale</span>
-                        <span class="kpi-value">128</span>
+                        <span class="kpi-value">{{ totale }}</span>
                     </div>
                     <div class="kpi-item warning">
                         <span class="kpi-label">Aperti</span>
-                        <span class="kpi-value">42</span>
+                        <span class="kpi-value">{{ aperti }}</span>
                     </div>
                     <div class="kpi-item success">
                         <span class="kpi-label">Accettati</span>
-                        <span class="kpi-value">61</span>
+                        <span class="kpi-value">{{ accettati }}</span>
                     </div>
                     <div class="kpi-item danger">
                         <span class="kpi-label">Rifiutati</span>
-                        <span class="kpi-value">25</span>
+                        <span class="kpi-value">{{ rifiutati }}</span>
                     </div>
                 </div>
             </div>
@@ -45,19 +68,18 @@
                 <div class="kpi-row">
                     <div class="kpi-item">
                         <span class="kpi-label">Totale</span>
-                        <span class="kpi-value">€ 485.000</span>
+                        <span class="kpi-value">€ {{ valoreTotale | number:'1.0-0' }}</span>
                     </div>
                     <div class="kpi-item success">
                         <span class="kpi-label">Accettati</span>
-                        <span class="kpi-value">€ 312.000</span>
+                        <span class="kpi-value">€ {{ valoreAccettati | number:'1.0-0' }}</span>
                     </div>
                     <div class="kpi-item">
                         <span class="kpi-label">Medio</span>
-                        <span class="kpi-value">€ 3.789</span>
+                        <span class="kpi-value">€ {{ valoreMedio | number:'1.0-0' }}</span>
                     </div>
                 </div>
-                <div class="card-footer">
-                </div>
+
                 <canvas baseChart [type]="barChartType" [data]="barChartData" [labels]="barChartLabels"
                     [options]="barChartOptions">
                 </canvas>
@@ -74,14 +96,13 @@
                 <div class="kpi-row">
                     <div class="kpi-item">
                         <span class="kpi-label">Ultimi 30 Giorni</span>
-                        <span class="kpi-value">18</span>
+                        <span class="kpi-value">{{ ultimi30 }}</span>
                     </div>
                     <div class="kpi-item">
                         <span class="kpi-label">Tasso Accettazione</span>
-                        <span class="kpi-value">71%</span>
+                        <span class="kpi-value">{{ tassoAccettazione }}%</span>
                     </div>
                 </div>
-
             </div>
             <div class="card-footer">
                 <canvas baseChart [type]="lineChartType" [data]="lineChartData" [labels]="lineChartLabels"
@@ -89,6 +110,6 @@
                 </canvas>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
