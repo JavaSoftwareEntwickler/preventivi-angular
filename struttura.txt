@@ -1,0 +1,142 @@
+Elenco del percorso delle cartelle per il volume OS
+Numero di serie del volume: 827F-1195
+C:.
+�   .editorconfig
+�   .gitignore
+�   angular.json
+�   Electron.md
+�   package-lock.json
+�   package.json
+�   README.md
+�   struttura.txt
+�   tsconfig.app.json
+�   tsconfig.json
+�   tsconfig.spec.json
+�   
+�       
++---public
+�       favicon.ico
+�       
++---src
+    �   custom-theme.scss
+    �   index.html
+    �   main.ts
+    �   styles.css
+    �   
+    +---app
+    �   �   app.config.ts
+    �   �   app.css
+    �   �   app.html
+    �   �   app.routes.ts
+    �   �   app.spec.ts
+    �   �   app.ts
+    �   �   
+    �   +---clienti
+    �   �       clienti.css
+    �   �       clienti.html
+    �   �       clienti.ts
+    �   �       
+    �   +---dashboard
+    �   �       dashboard.css
+    �   �       dashboard.html
+    �   �       dashboard.service.ts
+    �   �       dashboard.ts
+    �   �       
+    �   +---left-sidebar
+    �   �       collapse-on-navigate.directive.ts
+    �   �       left-sidebar.css
+    �   �       left-sidebar.html
+    �   �       left-sidebar.ts
+    �   �       
+    �   +---main
+    �   �       main.css
+    �   �       main.html
+    �   �       main.ts
+    �   �       
+    �   +---pages
+    �   �       pages.css
+    �   �       pages.html
+    �   �       pages.ts
+    �   �       
+    �   +---preventivo
+    �   �   �   preventivo-container.css
+    �   �   �   preventivo-container.html
+    �   �   �   preventivo-container.ts
+    �   �   �   
+    �   �   +---components
+    �   �   �   +---loading-bar
+    �   �   �   �       loading-bar.css
+    �   �   �   �       loading-bar.html
+    �   �   �   �       loading-bar.spec.ts
+    �   �   �   �       loading-bar.ts
+    �   �   �   �       
+    �   �   �   +---preventivo-detail-view
+    �   �   �   �       detail-view.css
+    �   �   �   �       detail-view.html
+    �   �   �   �       detail-view.spec.ts
+    �   �   �   �       detail-view.ts
+    �   �   �   �       
+    �   �   �   +---preventivo-form-edit
+    �   �   �   �       form-edit.css
+    �   �   �   �       form-edit.html
+    �   �   �   �       form-edit.spec.ts
+    �   �   �   �       form-edit.ts
+    �   �   �   �       
+    �   �   �   +---preventivo-list-view
+    �   �   �   �       list-view.css
+    �   �   �   �       list-view.html
+    �   �   �   �       list-view.spec.ts
+    �   �   �   �       list-view.ts
+    �   �   �   �       
+    �   �   �   +---preventivo-pagination-controls
+    �   �   �   �       pagination-controls.css
+    �   �   �   �       pagination-controls.html
+    �   �   �   �       pagination-controls.spec.ts
+    �   �   �   �       pagination-controls.ts
+    �   �   �   �       
+    �   �   �   +---preventivo-search
+    �   �   �   �       search.css
+    �   �   �   �       search.html
+    �   �   �   �       search.spec.ts
+    �   �   �   �       search.ts
+    �   �   �   �       
+    �   �   �   +---preventivo-table-view
+    �   �   �           table.css
+    �   �   �           table.html
+    �   �   �           table.spec.ts
+    �   �   �           table.ts
+    �   �   �           
+    �   �   +---models
+    �   �   �       preventivo-model.ts
+    �   �   �       righe-preventivo-model.ts
+    �   �   �       
+    �   �   +---services
+    �   �           form.service.ts
+    �   �           pdf-api.service.ts
+    �   �           preventivo-api.service.ts
+    �   �           preventivo-managment.service.ts
+    �   �           righe-preventivo-api.service.ts
+    �   �           
+    �   +---settings
+    �   �       settings.css
+    �   �       settings.html
+    �   �       settings.ts
+    �   �       
+    �   +---shared
+    �       +---helper
+    �       �       constants.ts
+    �       �       validators-helper.ts
+    �       �       
+    �       +---services
+    �               api-crud.service.ts
+    �               dynamic-pagination.service.ts
+    �               
+    +---assets
+        �   
+        +---fontawesome
+                +---css
+                �   all.css
+                   
+                +---webfonts
+                �   a-brands-400.eot ecc ecc
+                �   ecc ecc

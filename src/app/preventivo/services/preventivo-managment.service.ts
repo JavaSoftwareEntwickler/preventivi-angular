@@ -203,7 +203,7 @@ export class PreventivoManagementService {
         const righePreventivo = preventivoClone.righe;
         preventivoClone.righe = [];
         this.righePreventivoSignal.set([]);
-        console.log("clonePreventivo righe preventivo: dopo manipolazione clone", p.righe)
+        //console.log("clonePreventivo righe preventivo: dopo manipolazione clone", p.righe)
         return from(righePreventivo).pipe(
             concatMap(riga =>
                 this.apiRighePreventivoService.create(riga).pipe(

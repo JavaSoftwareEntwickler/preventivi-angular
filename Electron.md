@@ -158,7 +158,7 @@ window.addEventListener('DOMContentLoaded', () => {
   "name": "preventivo-desktop",
   "main": "electron/main.js",
   "scripts": {
-    "build:fe": "ng build --configuration production",
+    "build:fe": "cd preventivo && ng build --configuration production",
     "build:be": "cd server-be && npm run build",
     "build": "npm run build:fe && npm run build:be",
     "electron:dev": "electron .",
